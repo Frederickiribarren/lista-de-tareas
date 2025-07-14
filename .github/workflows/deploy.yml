@@ -1,0 +1,22 @@
+name: Deploy to GitHub Pages
+
+# Se ejecuta cada vez que haces un push a la rama 'main'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Clona tu repositorio en el servidor de GitHub
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Usa una acción pre-hecha para desplegar a GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./ # El directorio a publicar (la raíz de tu proyecto)
