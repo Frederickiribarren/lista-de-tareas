@@ -1,0 +1,31 @@
+.tarea {
+    background-color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab;
+}
+
+.tarea.dragging {
+    opacity: 0.5;
+}
+
+.delete-icon {
+    cursor: pointer;
+    display: none; /* Oculto por defecto */
+    color: #e74c3c;
+    margin-left: 10px;
+}
+
+.terminadas .tarea .delete-icon {
+    display: inline; /* Visible en la columna de terminadas */
+}
+
+.tarea p {
+    margin: 0;
+    flex-grow: 1;
+}
