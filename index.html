@@ -3,43 +3,44 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Lista de Tareas Moderna</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <div class="containerPrincipal" id="contenido">
-      <h2>LISTA DE TAREAS</h2>
-      <input
-        id="nuevaTarea"
-        class="inputIngresar"
-        type="text"
-        placeholder="Ingresar Tarea"
-      />
-      <div>
-        <button id="btn-agregar" class="btn-add">AGREGAR</button>
-        <button id="btn-pdf" class="btn-guardar">PDF</button>
+      <header class="app-header">
+        <h1>Mi Lista de Tareas</h1>
+        <button id="btn-pdf" class="btn-secondary">PDF</button>
+      </header>
+
+      <div class="input-container">
+        <input
+          id="nuevaTarea"
+          class="inputIngresar"
+          type="text"
+          placeholder="¿Qué necesitas hacer hoy?"
+        />
+        <button id="btn-agregar" class="btn-add">+</button>
       </div>
+
       <div class="containerSecundario">
         <div class="columna">
           <h2>Pendientes</h2>
-          <div
-            id="pendientes"
-            class="tareas-container"
-          ></div>
+          <div id="pendientes" class="tareas-container"></div>
         </div>
         <div class="columna">
           <h2>En Progreso</h2>
-          <div
-            id="en-progreso"
-            class="tareas-container"
-          ></div>
+          <div id="en-progreso" class="tareas-container"></div>
         </div>
         <div class="columna">
           <h2>Terminadas</h2>
-          <div
-            id="terminadas"
-            class="tareas-container"
-          ></div>
+          <div id="terminadas" class="tareas-container"></div>
         </div>
       </div>
     </div>
@@ -48,9 +49,4 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </body>
 </html>
-    </div>
-    <script src="js/app.js"></script>
-    <script src="js/pdf.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  </body>
-</html>
+        
