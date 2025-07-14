@@ -105,7 +105,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         columna.appendChild(elementoTarea);
-        addDragEvents(elementoTarea);
+        
+        // Lógica condicional para interacción
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            elementoTarea.setAttribute('draggable', 'false');
+            elementoTarea.addEventListener('click', () => mostrarOpcionesDeMovimiento(id, columnaId));
+        } else {
+            addDragEvents(elementoTarea);
+        }
+    };
+
+    // Función para mostrar opciones de movimiento en móvil
+    const mostrarOpcionesDeMovimiento = (id, columnaActual) => {
+        const opciones = {
+            'pendientes': 'Mover a Pendientes',
+            'en-progreso': 'Mover a En Progreso',
+            'terminadas': 'Mover a Terminadas'
+        };
+
+        // Elimina la columna actual de las opciones para no moverla a donde ya está
+        delete opciones[columnaActual];
+
+        Swal.fire({
+            title: 'Mover Tarea',
+            text: 'Selecciona el nuevo estado para esta tarea:',
+            input: 'select',
+            inputOptions: opciones,
+            inputPlaceholder: 'Seleccionar...',
+            showCancelButton: true,
+            confirmButtonText: 'Mover',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: 'var(--color-primary)',
+        }).then((result) => {
+            if (result.isConfirmed && result.value) {
+                const nuevaColumnaId = result.value;
+                if (tareasCollection) {
+                    tareasCollection.doc(id).update({ columna: nuevaColumnaId });
+                }
+            }
+        });
     };
 
     // Función para eliminar una tarea
