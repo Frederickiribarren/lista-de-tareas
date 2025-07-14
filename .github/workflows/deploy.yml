@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+# Añade permisos de escritura para que la acción pueda crear la rama gh-pages
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
