@@ -43,6 +43,13 @@ self.addEventListener('activate', event => {
   );
 });
 
+// Este listener se activa cuando la app cliente envía un mensaje.
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
