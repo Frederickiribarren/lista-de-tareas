@@ -61,13 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para agregar una nueva tarea
     const agregarTarea = () => {
-        const textoTarea = nuevaTareaInput.value.trim();
+        let textoTarea = nuevaTareaInput.value.trim();
         if (textoTarea === '' || !tareasCollection) {
             return;
         }
 
+        // Sanitización: Elimina cualquier etiqueta HTML para prevenir XSS almacenado.
+        const sanitizedText = textoTarea.replace(/<[^>]*>?/gm, '');
+
         const nuevaTarea = {
-            texto: textoTarea,
+            texto: sanitizedText,
             columna: 'pendientes' // Todas las tareas nuevas van a pendientes
         };
 
@@ -121,11 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 tareasCollection.doc(id).delete().then(() => {
-                    Swal.fire(
-                        '¡Eliminada!',
-                        'La tarea ha sido eliminada.',
-                        'success'
-                    );
+                    Swal.fire({
+                        title: '¡Eliminada!',
+                        text: 'La tarea ha sido eliminada.',
+                        icon: 'success',
+                        confirmButtonColor: 'var(--color-primary)'
+                    });
                 });
             }
         });
