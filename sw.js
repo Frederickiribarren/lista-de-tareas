@@ -1,13 +1,15 @@
-const CACHE_NAME = 'lista-de-tareas-cache-v3'; // Versión actualizada
+const CACHE_NAME = 'lista-de-tareas-cache-v4'; // Versión actualizada
+const REPO_NAME = '/lista-de-tareas'; // Nombre de tu repositorio
+
 const urlsToCache = [
-  './',
-  './index.html',
-  './css/style.css',
-  './js/app.js',
-  './js/pdf.js',
-  './js/auth.js',
-  './images/icon-192.png',
-  './images/icon-512.png',
+  `${REPO_NAME}/`,
+  `${REPO_NAME}/index.html`,
+  `${REPO_NAME}/css/style.css`,
+  `${REPO_NAME}/js/app.js`,
+  `${REPO_NAME}/js/pdf.js`,
+  `${REPO_NAME}/js/auth.js`,
+  `${REPO_NAME}/images/icon-192.png`,
+  `${REPO_NAME}/images/icon-512.png`,
   'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap',
   'https://cdn.jsdelivr.net/npm/sweetalert2@11',
   'https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js',
