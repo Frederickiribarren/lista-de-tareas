@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let userId = null;
     let tareasCollection;
     let unsubscribe; // Variable para guardar la función que detiene el listener
+    const isMobile = window.matchMedia("(max-width: 768px)").matches; // Detección de móvil más robusta
 
     // Escuchar el evento de inicio de sesión desde auth.js
     window.addEventListener('user-logged-in', (event) => {
@@ -100,14 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteIcon = document.createElement('span');
             deleteIcon.textContent = '✖';
             deleteIcon.classList.add('delete-icon');
-            deleteIcon.onclick = () => eliminarTarea(id);
+            deleteIcon.onclick = (event) => {
+                event.stopPropagation(); // Evita que el clic se propague a la tarea
+                eliminarTarea(id);
+            };
             elementoTarea.appendChild(deleteIcon);
         }
 
         columna.appendChild(elementoTarea);
         
         // Lógica condicional para interacción
-        const isMobile = window.innerWidth <= 768;
         if (isMobile) {
             elementoTarea.setAttribute('draggable', 'false');
             elementoTarea.addEventListener('click', () => mostrarOpcionesDeMovimiento(id, columnaId));

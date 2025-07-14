@@ -553,7 +553,7 @@ input[type="checkbox"]:disabled::before {
     }
 
     .tarea {
-        cursor: pointer; /* Indica que la tarea es tappable */
+        cursor: pointer; /* Indica que la tarea es interactiva al tacto */
     }
 }
 
