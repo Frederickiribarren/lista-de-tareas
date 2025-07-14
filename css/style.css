@@ -199,6 +199,236 @@ body {
     transform: scale(1.2);
 }
 
+/* --- ESTILOS DE AUTENTICACIÓN PARA ESCRITORIO Y MÓVIL --- */
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--color-background);
+}
+
+.container-auth {
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 768px;
+    min-height: 480px;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container-auth.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container-auth.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.auth-form {
+    background-color: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    text-align: center;
+}
+
+.auth-form h1 {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--color-text-primary);
+}
+
+.auth-form input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 8px;
+}
+
+.forgot-password {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    color: var(--color-primary);
+}
+
+.auth-form button {
+    border-radius: 20px;
+    border: 1px solid var(--color-primary);
+    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.auth-form button:active {
+    transform: scale(0.95);
+}
+
+.auth-form button:focus {
+    outline: none;
+}
+
+.ghost {
+    border-radius: 20px;
+    border: 2px solid #FFFFFF;
+    background-color: transparent;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.ghost:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.ghost:active {
+    transform: scale(0.95);
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container-auth.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #FFFFFF;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container-auth.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel p {
+    font-size: 14px;
+    font-weight: 100;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 20px 0 30px;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container-auth.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container-auth.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+.register-link-mobile {
+    display: none; /* Oculto en escritorio por defecto */
+}
+
+/* Estilos para los inputs dentro de SweetAlert2 */
+.swal2-input {
+    margin: 0.5em auto !important;
+}
+
 input[type="checkbox"] {
     -webkit-appearance: none;
     appearance: none;
@@ -240,109 +470,93 @@ input[type="checkbox"]:disabled::before {
     box-shadow: inset 1em 1em #ccc;
 }
 
-/* Estilos de Autenticación */
-#auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 100vh;
-}
-
-.auth-form {
-    background: var(--color-surface);
-    padding: 40px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.auth-form h2 {
-    margin-bottom: 25px;
-    color: var(--color-primary);
-}
-
-.auth-form input {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    font-size: 1rem;
-}
-
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.auth-buttons button {
-    flex-grow: 1;
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    background: var(--color-secondary);
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: background-color 0.3s;
-}
-
-.auth-buttons button:hover {
-    background-color: var(--color-primary);
-}
-
-#btn-logout {
-    /* Se eliminan los estilos específicos de aquí, ahora se manejan con .btn-danger */
-}
-
-#btn-logout:hover {
-    /* Se eliminan los estilos específicos de aquí */
-}
-
-
 @media (max-width: 768px) {
     .containerPrincipal {
-        padding: 15px;
-        margin: 20px auto;
+        margin: 20px 10px;
+        padding: 20px;
     }
 
     .app-header {
-        flex-direction: column; /* Stack elements on mobile */
-        align-items: center; /* Center items on mobile */
-        gap: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 
     .app-header h1 {
-       text-align: center;
+        font-size: 1.5rem;
     }
 
-    /* Ocultar texto de los botones en móvil para ahorrar espacio */
-    .btn-secondary span {
-        display: none;
+    .input-container {
+        flex-direction: column;
+    }
+
+    .inputIngresar {
+        border-radius: var(--border-radius);
+        margin-bottom: 10px;
+    }
+
+    .btn-add {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 1.5rem;
     }
 
     .btn-secondary {
-        padding: 12px; /* Hacerlos más cuadrados */
+        width: 100%;
+        justify-content: center;
+        padding: 12px 0;
+        font-size: 1rem;
     }
 
     .containerSecundario {
         grid-template-columns: 1fr;
     }
 
-    /* Estilos de Autenticación */
-    #auth-container {
-        padding: 15px;
+    /* --- LÓGICA PARA VISTA MÓVIL (MODAL) --- */
+    .container-auth {
+        max-width: 420px;
+        min-height: auto;
+        padding: 40px 25px;
+        box-shadow: none;
+        background: none;
     }
 
-    .auth-form {
+    /* Ocultar los componentes de la animación de escritorio */
+    .overlay-container,
+    .sign-up-container {
+        display: none;
+    }
+
+    /* El formulario de inicio de sesión ocupa todo el espacio */
+    .form-container,
+    .sign-in-container {
+        position: static;
         width: 100%;
-        padding: 25px;
+        height: auto;
+        transform: none;
+        background-color: var(--color-surface);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+    }
+    
+    .auth-form {
+        padding: 0;
+    }
+
+    /* Mostrar el enlace de registro para móvil */
+    .register-link-mobile {
+        display: block;
+        margin-top: 25px;
+        color: var(--color-text-secondary);
+    }
+
+    .register-link-mobile a {
+        color: var(--color-primary);
+        font-weight: 600;
+        text-decoration: none;
     }
 }
+
 
 

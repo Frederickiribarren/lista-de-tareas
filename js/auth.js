@@ -14,53 +14,158 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-const authContainer = document.getElementById('auth-container');
+// --- ELEMENTOS DEL DOM ---
+const authWrapper = document.getElementById('auth-wrapper');
 const appContainer = document.getElementById('contenido');
-const btnLogin = document.getElementById('btn-login');
-const btnSignup = document.getElementById('btn-signup');
-const btnLogout = document.getElementById('btn-logout');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
+const authContainer = document.getElementById('auth-container');
 
-// --- LÓGICA DE REGISTRO ---
-btnSignup.addEventListener('click', () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
-  if (!email || !password) {
-    return Swal.fire({
-      icon: 'warning',
-      title: 'Campos incompletos',
-      text: 'Por favor, ingresa correo y contraseña.',
-      confirmButtonColor: 'var(--color-primary)'
+// Botones para el slider (escritorio)
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+
+// Formularios
+const btnLogin = document.getElementById('btn-login');
+const btnSignup = document.getElementById('btn-signup'); // Botón del form de registro de escritorio
+const loginEmailInput = document.getElementById('login-email');
+const loginPasswordInput = document.getElementById('login-password');
+const signupEmailInput = document.getElementById('signup-email');
+const signupPasswordInput = document.getElementById('signup-password');
+
+// Enlace de registro (móvil)
+const registerLink = document.getElementById('register-link'); 
+
+const btnLogout = document.getElementById('btn-logout');
+const forgotPasswordLink = document.getElementById('forgot-password-link');
+
+
+// --- LÓGICA DEL SLIDER (ESCRITORIO) ---
+if (signUpButton && signInButton) {
+    signUpButton.addEventListener('click', () => {
+        authContainer.classList.add("right-panel-active");
     });
-  }
-  // Esta función de Firebase crea un nuevo usuario
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(userCredential => {
-      console.log('Usuario registrado:', userCredential.user);
-      Swal.fire({
-        icon: 'success',
-        title: '¡Registro exitoso!',
-        text: 'Bienvenido/a. Redirigiendo...',
-        timer: 1500,
-        showConfirmButton: false
-      });
-    })
-    .catch(error => {
-      // Muestra un error si algo sale mal (ej: contraseña débil, email ya en uso)
-      Swal.fire({
-        icon: 'error',
-        title: 'Error al registrarse',
-        text: 'El correo ya está en uso o la contraseña es muy débil.',
-        confirmButtonColor: 'var(--color-danger)'
-      });
+
+    signInButton.addEventListener('click', () => {
+        authContainer.classList.remove("right-panel-active");
+    });
+}
+
+// --- LÓGICA DE REGISTRO CON MODAL (MÓVIL) ---
+registerLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    Swal.fire({
+        title: 'Crear una Cuenta',
+        html:
+            `<input id="swal-email" class="swal2-input" placeholder="Correo electrónico" type="email" required>` +
+            `<input id="swal-password" class="swal2-input" placeholder="Contraseña (mín. 6 caracteres)" type="password" required>`,
+        confirmButtonText: 'Registrarse',
+        confirmButtonColor: 'var(--color-primary)',
+        focusConfirm: false,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+            const email = Swal.getPopup().querySelector('#swal-email').value;
+            const password = Swal.getPopup().querySelector('#swal-password').value;
+            if (!email || !password) {
+                Swal.showValidationMessage(`Por favor, completa todos los campos`);
+                return false;
+            }
+            return auth.createUserWithEmailAndPassword(email, password)
+                .catch(error => {
+                    Swal.showValidationMessage(`Error: El correo ya está en uso o la contraseña es muy débil.`);
+                });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Registro exitoso!',
+                text: 'Ahora serás redirigido.',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
     });
 });
 
+
+// --- LÓGICA DE OLVIDÉ MI CONTRASEÑA ---
+forgotPasswordLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    Swal.fire({
+        title: 'Restablecer Contraseña',
+        text: 'Ingresa tu correo electrónico para recibir un enlace de restablecimiento.',
+        input: 'email',
+        inputPlaceholder: 'tu.correo@ejemplo.com',
+        showCancelButton: true,
+        confirmButtonText: 'Enviar enlace',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: 'var(--color-primary)',
+        showLoaderOnConfirm: true,
+        preConfirm: (email) => {
+            if (!email) {
+                Swal.showValidationMessage('Por favor, ingresa un correo electrónico.');
+                return false;
+            }
+            return auth.sendPasswordResetEmail(email)
+                .catch(error => {
+                    let errorMessage;
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage = 'No se encontró ningún usuario con este correo electrónico.';
+                            break;
+                        default:
+                            errorMessage = 'Ocurrió un error. Por favor, inténtalo de nuevo.';
+                    }
+                    Swal.showValidationMessage(`Error: ${errorMessage}`);
+                });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Enlace enviado!',
+                text: 'Revisa tu bandeja de entrada (y la carpeta de spam) para restablecer tu contraseña.',
+                confirmButtonColor: 'var(--color-primary)'
+            });
+        }
+    });
+});
+
+
+// --- LÓGICA DE REGISTRO (ESCRITORIO) ---
+btnSignup.addEventListener('click', (e) => {
+    e.preventDefault();
+    const email = signupEmailInput.value;
+    const password = signupPasswordInput.value;
+    if (!email || !password) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'Campos incompletos',
+            text: 'Por favor, ingresa correo y contraseña.',
+            confirmButtonColor: 'var(--color-primary)'
+        });
+    }
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(userCredential => {
+            console.log('Usuario registrado:', userCredential.user);
+            // El observador se encargará del resto
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al registrarse',
+                text: 'El correo ya está en uso o la contraseña es muy débil.',
+                confirmButtonColor: 'var(--color-danger)'
+            });
+        });
+});
+
 // --- LÓGICA DE INICIO DE SESIÓN ---
-btnLogin.addEventListener('click', () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
+btnLogin.addEventListener('click', (e) => {
+  e.preventDefault();
+  const email = loginEmailInput.value;
+  const password = loginPasswordInput.value;
   if (!email || !password) {
     return Swal.fire({
       icon: 'warning',
@@ -94,13 +199,27 @@ btnLogout.addEventListener('click', () => {
 auth.onAuthStateChanged(user => {
   if (user) {
     // Usuario ha iniciado sesión
-    authContainer.style.display = 'none';
+    authWrapper.style.display = 'none';
     appContainer.style.display = 'block';
     // Avisa a app.js que el usuario está listo para cargar sus tareas
     window.dispatchEvent(new CustomEvent('user-logged-in', { detail: { userId: user.uid } }));
   } else {
     // Usuario ha cerrado sesión
-    authContainer.style.display = 'flex';
+    authWrapper.style.display = 'flex';
+    appContainer.style.display = 'none';
+  }
+});
+// Decide qué pantalla mostrar (login o la app de tareas)
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // Usuario ha iniciado sesión
+    authWrapper.style.display = 'none';
+    appContainer.style.display = 'block';
+    // Avisa a app.js que el usuario está listo para cargar sus tareas
+    window.dispatchEvent(new CustomEvent('user-logged-in', { detail: { userId: user.uid } }));
+  } else {
+    // Usuario ha cerrado sesión
+    authWrapper.style.display = 'flex';
     appContainer.style.display = 'none';
   }
 });

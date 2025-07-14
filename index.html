@@ -22,15 +22,44 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
-    <!-- Contenedor de Autenticación -->
-    <div id="auth-container">
-      <div class="auth-form">
-        <h2>Iniciar Sesión / Registrarse</h2>
-        <input type="email" id="email" placeholder="Correo electrónico" required />
-        <input type="password" id="password" placeholder="Contraseña" required />
-        <div class="auth-buttons">
-          <button id="btn-login">Iniciar Sesión</button>
-          <button id="btn-signup">Registrarse</button>
+    <!-- Contenedor de Autenticación con lógica dual -->
+    <div class="auth-wrapper" id="auth-wrapper">
+      <div class="container-auth" id="auth-container">
+        <!-- Formulario de Registro (para escritorio) -->
+        <div class="form-container sign-up-container">
+          <form class="auth-form">
+            <h1>Crear una Cuenta</h1>
+            <input type="email" id="signup-email" placeholder="Correo electrónico" required />
+            <input type="password" id="signup-password" placeholder="Contraseña" required />
+            <button type="button" id="btn-signup">Registrarse</button>
+          </form>
+        </div>
+        <!-- Formulario de Inicio de Sesión -->
+        <div class="form-container sign-in-container">
+          <form class="auth-form">
+            <h1>Iniciar Sesión</h1>
+            <input type="email" id="login-email" placeholder="Correo electrónico" required />
+            <input type="password" id="login-password" placeholder="Contraseña" required />
+            <a href="#" id="forgot-password-link" class="forgot-password">¿Olvidaste tu contraseña?</a>
+            <button type="button" id="btn-login">Iniciar Sesión</button>
+            <!-- Enlace de registro solo para móvil -->
+            <p class="register-link-mobile">¿No tienes una cuenta? <a href="#" id="register-link">Regístrate</a></p>
+          </form>
+        </div>
+        <!-- Overlay (para escritorio) -->
+        <div class="overlay-container">
+          <div class="overlay">
+            <div class="overlay-panel overlay-left">
+              <h1>¡Bienvenido de vuelta!</h1>
+              <p>Para seguir conectado con nosotros, por favor inicia sesión.</p>
+              <button class="ghost" id="signIn">Iniciar Sesión</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+              <h1>¡Hola!</h1>
+              <p>Ingresa tus datos y comienza tu viaje con nosotros.</p>
+              <button class="ghost" id="signUp">Registrarse</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
