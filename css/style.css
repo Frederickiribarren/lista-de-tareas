@@ -1,0 +1,155 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #f8f9fa; /* Fondo suave */
+    color: #212529; /* Color de texto principal */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+div.containerPrincipal {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   height: auto;
+   width: 90%; 
+   max-width: 1200px;
+   /* border: 1px solid black; */ /* Reemplazado por sombra */
+   box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra sutil */
+   border-radius: 12px; /* Bordes más suaves */
+   margin: 50px auto;
+   padding: 40px;
+   background-color: #ffffff; /* Fondo blanco para el contenedor */
+}
+
+h2 {
+    font-size: 48px;
+    color: #343a40;
+    margin-bottom: 30px;
+}
+
+input.inputIngresar {
+    height: 40px;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px;
+    padding: 0 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input.inputIngresar:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+button.btn-add, button.btn-guardar {
+    width: 120px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    font-size: 16px;
+}
+
+button.btn-add:hover, button.btn-guardar:hover {
+    transform: translateY(-2px);
+}
+
+button.btn-add {
+    background-color: #28a745; /* Verde éxito */
+    color: white;
+}
+
+button.btn-add:hover {
+    background-color: #218838;
+}
+
+button.btn-guardar {
+    background-color: #007bff; /* Azul primario */
+    color: white;
+}
+
+button.btn-guardar:hover {
+    background-color: #0069d9;
+}
+
+div.containerSecundario {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+div.containerProcesos {
+    height: auto;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+h3.proceso1, h3.proceso2, h3.proceso3 {
+    font-size: 22px;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 2px solid; /* Usar borde inferior en lugar de subrayado */
+}
+
+h3.proceso1 {
+    color: #007bff; /* Azul */
+    border-bottom-color: #007bff;
+}
+
+h3.proceso2 {
+    color: #ffc107; /* Amarillo/Naranja advertencia */
+    border-bottom-color: #ffc107;
+}
+
+h3.proceso3 {
+    color: #28a745; /* Verde éxito */
+    border-bottom-color: #28a745;
+}
+
+ul {
+    font-size: 18px;  
+    list-style: none;
+    width: 100%;
+    padding: 0;
+}
+
+ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+ul li span {
+    margin-left: 15px;
+}
+
+input.inputCheckbox {
+    width: 20px;
+    height: 20px;
+    accent-color: #007bff; /* Azul primario */
+}
+
+@media (min-width: 768px) {
+    div.containerSecundario {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+

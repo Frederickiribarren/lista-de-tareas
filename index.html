@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="containerPrincipal" id="contenido">
+      <h2>LISTA DE TAREAS</h2>
+      <input
+        id="nuevaTarea"
+        class="inputIngresar"
+        type="text"
+        placeholder="Ingresar Tarea"
+      />
+      <div>
+        <button id="btn-agregar" class="btn-add">AGREGAR</button>
+        <button id="btn-pdf" class="btn-guardar">PDF</button>
+      </div>
+      <div class="containerSecundario">
+        <div class="containerProcesos">
+          <h3 class="proceso1">inicio</h3>
+          <ul id="listaTareas1"></ul>
+        </div>
+        <div class="containerProcesos">
+          <h3 class="proceso2">Proceso</h3>
+          <ul id="listaTareas2"></ul>
+        </div>
+        <div class="containerProcesos">
+          <h3 class="proceso3">Terminado</h3>
+          <ul id="listaTareas3"></ul>
+        </div>
+      </div>
+    </div>
+    <script src="js/scripts.js"></script>
+    <script src="js/pdf.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </body>
+</html>
