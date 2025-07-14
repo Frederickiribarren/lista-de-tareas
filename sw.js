@@ -1,15 +1,19 @@
-const CACHE_NAME = 'lista-de-tareas-cache-v2'; // Versión actualizada
+const CACHE_NAME = 'lista-de-tareas-cache-v3'; // Versión actualizada
 const urlsToCache = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './js/pdf.js',
-  './js/auth.js', // Añadido
-  './js/index.js',
+  './js/auth.js',
   './images/icon-192.png',
   './images/icon-512.png',
-  'https://cdn.jsdelivr.net/npm/sweetalert2@11' // Añadido
+  'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap',
+  'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+  'https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js',
+  'https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js',
+  'https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
 ];
 
 self.addEventListener('install', event => {
