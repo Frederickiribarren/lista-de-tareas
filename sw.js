@@ -51,7 +51,7 @@ self.addEventListener('message', event => {
   }
 });
 
-// 4. Estrategia de caché "Cache falling back to network" para las peticiones
+// 4. Estrategia de caché "Stale-While-Revalidate"
 self.addEventListener('fetch', event => {
   // Ignorar las solicitudes que no son GET, ya que no se pueden cachear.
   if (event.request.method !== 'GET') {
@@ -59,19 +59,19 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    caches.match(event.request)
-      .then(cachedResponse => {
-        // Si el recurso está en la caché, lo devolvemos.
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        // Si no está en la caché, lo buscamos en la red.
-        return fetch(event.request).catch(error => {
-          console.warn('Fetch failed; app is offline.', event.request.url);
-          // No se devuelve nada, permitiendo que el navegador maneje el error de red.
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.match(event.request).then(cachedResponse => {
+        // 1. Intenta obtener el recurso de la red en segundo plano
+        const fetchPromise = fetch(event.request).then(networkResponse => {
+          // Si la petición a la red es exitosa, la guardamos en caché
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
         });
-      })
+
+        // 2. Devuelve la respuesta de la caché si existe, si no, espera a la red
+        return cachedResponse || fetchPromise;
+      });
+    })
   );
 });
-  
+

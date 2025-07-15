@@ -141,11 +141,12 @@
     </div>
 
     <!-- Contenedor para la notificación de actualización -->
+    <div id="update-overlay" class="update-overlay"></div>
     <div id="update-toast" class="update-toast">
       <span>Hay una nueva versión disponible.</span>
       <div class="update-toast-actions">
         <button id="update-now-btn" class="btn-update">Actualizar</button>
-        <button id="update-dismiss-btn" class="btn-dismiss" title="Cerrar">&times;</button>
+        <button id="update-dismiss-btn" class="btn-dismiss">Más tarde</button>
       </div>
     </div>
 
@@ -162,25 +163,34 @@
 
     <script>
       if ("serviceWorker" in navigator) {
+        const updateOverlay = document.getElementById('update-overlay');
         const updateToast = document.getElementById('update-toast');
         const updateNowBtn = document.getElementById('update-now-btn');
         const updateDismissBtn = document.getElementById('update-dismiss-btn');
+        let newWorker; // Variable para guardar la referencia al nuevo Service Worker
 
-        // Función para mostrar la notificación de actualización
-        const showUpdateToast = (registration) => {
+        const showUpdateDialog = (registration) => {
+          newWorker = registration.waiting;
+          updateOverlay.classList.add('show');
           updateToast.classList.add('show');
-          
-          updateNowBtn.onclick = () => {
-            updateToast.classList.remove('show');
-            if (registration.waiting) {
-              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            }
-          };
-
-          updateDismissBtn.onclick = () => {
-            updateToast.classList.remove('show');
-          };
         };
+
+        const hideUpdateDialog = () => {
+          updateOverlay.classList.remove('show');
+          updateToast.classList.remove('show');
+        };
+
+        // Asignar los eventos de clic una sola vez para mayor eficiencia
+        updateNowBtn.addEventListener('click', () => {
+          if (newWorker) {
+            newWorker.postMessage({ type: 'SKIP_WAITING' });
+          }
+          hideUpdateDialog();
+        });
+
+        updateDismissBtn.addEventListener('click', () => {
+          hideUpdateDialog();
+        });
 
         // 1. Registrar el Service Worker
         navigator.serviceWorker
@@ -193,11 +203,11 @@
 
             // 2. Escuchar si se encuentra una nueva actualización
             registration.onupdatefound = () => {
-              const newWorker = registration.installing;
+              newWorker = registration.installing;
               newWorker.onstatechange = () => {
+                // Si hay un nuevo worker instalado y esperando, mostrar el aviso
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  // Nueva versión lista para instalar, mostrar el aviso.
-                  showUpdateToast(registration);
+                  showUpdateDialog(registration);
                 }
               };
             };
@@ -214,7 +224,7 @@
           refreshing = true;
         });
 
-        // 4. (NUEVO) Comprobar actualizaciones cuando la app vuelve a estar visible
+        // 4. Comprobar actualizaciones cuando la app vuelve a estar visible
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
             console.log('App is visible, checking for updates...');
