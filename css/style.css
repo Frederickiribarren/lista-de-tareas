@@ -429,6 +429,36 @@ body {
     margin: 0.5em auto !important;
 }
 
+/* --- ESTILOS PARA BOTONES DE MOVER TAREA EN MODAL --- */
+.swal-text {
+    margin: 0 0 1em;
+}
+
+.swal-button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 1em;
+}
+
+.swal-move-button {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--color-primary);
+    background-color: transparent;
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.swal-move-button:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
+
 /* --- ESTILOS PARA NOTIFICACIÓN DE ACTUALIZACIÓN --- */
 .update-toast {
   position: fixed;
