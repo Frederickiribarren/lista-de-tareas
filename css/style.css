@@ -429,6 +429,39 @@ body {
     margin: 0.5em auto !important;
 }
 
+/* --- ESTILOS PARA NOTIFICACIÓN DE ACTUALIZACIÓN --- */
+.update-toast {
+  position: fixed;
+  bottom: -100px; /* Oculto por defecto */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-text-primary);
+  color: white;
+  padding: 15px 25px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 1000;
+  transition: bottom 0.5s ease-in-out;
+}
+
+.update-toast.show {
+  bottom: 20px; /* Visible */
+}
+
+.update-toast .btn-update {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+}
+
 input[type="checkbox"] {
     -webkit-appearance: none;
     appearance: none;

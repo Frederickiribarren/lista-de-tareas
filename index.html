@@ -140,6 +140,12 @@
       </div>
     </div>
 
+    <!-- Contenedor para la notificación de actualización -->
+    <div id="update-toast" class="update-toast">
+      <span>Hay una nueva versión disponible.</span>
+      <button id="update-now-btn" class="btn-update">Actualizar</button>
+    </div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -153,51 +159,43 @@
 
     <script>
       if ("serviceWorker" in navigator) {
+        const updateToast = document.getElementById('update-toast');
+        const updateNowBtn = document.getElementById('update-now-btn');
+
         // Función para mostrar la notificación de actualización
-        const showUpdatePrompt = (registration) => {
-          Swal.fire({
-            title: '¡Actualización disponible!',
-            text: "Hay una nueva versión de la aplicación. ¿Quieres actualizar ahora?",
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonColor: 'var(--color-primary)',
-            cancelButtonColor: 'var(--color-text-secondary)',
-            confirmButtonText: 'Actualizar',
-            cancelButtonText: 'Más tarde'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Envía un mensaje al Service Worker para que se active
-              if (registration.waiting) {
-                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-              }
+        const showUpdateToast = (registration) => {
+          updateToast.classList.add('show');
+          updateNowBtn.onclick = () => {
+            updateToast.classList.remove('show');
+            if (registration.waiting) {
+              registration.waiting.postMessage({ type: 'SKIP_WAITING' });
             }
-          });
+          };
         };
 
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("sw.js")
-            .then((registration) => {
-              console.log(
-                "ServiceWorker registration successful with scope: ",
-                registration.scope
-              );
+        // 1. Registrar el Service Worker
+        navigator.serviceWorker
+          .register("sw.js")
+          .then((registration) => {
+            console.log(
+              "ServiceWorker registration successful with scope: ",
+              registration.scope
+            );
 
-              // 1. Escuchar si se encuentra una nueva actualización
-              registration.onupdatefound = () => {
-                const newWorker = registration.installing;
-                newWorker.onstatechange = () => {
-                  // 2. Cuando el nuevo SW está instalado y esperando, mostrar el aviso
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    showUpdatePrompt(registration);
-                  }
-                };
+            // 2. Escuchar si se encuentra una nueva actualización
+            registration.onupdatefound = () => {
+              const newWorker = registration.installing;
+              newWorker.onstatechange = () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // Nueva versión lista para instalar, mostrar el aviso.
+                  showUpdateToast(registration);
+                }
               };
-            })
-            .catch((err) => {
-              console.log("ServiceWorker registration failed: ", err);
-            });
-        });
+            };
+          })
+          .catch((err) => {
+            console.log("ServiceWorker registration failed: ", err);
+          });
 
         // 3. Recargar la página una vez que el nuevo SW toma el control
         let refreshing;
@@ -205,6 +203,18 @@
           if (refreshing) return;
           window.location.reload();
           refreshing = true;
+        });
+
+        // 4. (NUEVO) Comprobar actualizaciones cuando la app vuelve a estar visible
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            console.log('App is visible, checking for updates...');
+            navigator.serviceWorker.getRegistration().then(reg => {
+              if (reg) {
+                reg.update();
+              }
+            });
+          }
         });
       }
     </script>
