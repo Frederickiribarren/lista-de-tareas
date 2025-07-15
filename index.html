@@ -143,7 +143,10 @@
     <!-- Contenedor para la notificación de actualización -->
     <div id="update-toast" class="update-toast">
       <span>Hay una nueva versión disponible.</span>
-      <button id="update-now-btn" class="btn-update">Actualizar</button>
+      <div class="update-toast-actions">
+        <button id="update-now-btn" class="btn-update">Actualizar</button>
+        <button id="update-dismiss-btn" class="btn-dismiss" title="Cerrar">&times;</button>
+      </div>
     </div>
 
     <!-- Firebase SDKs -->
@@ -161,15 +164,21 @@
       if ("serviceWorker" in navigator) {
         const updateToast = document.getElementById('update-toast');
         const updateNowBtn = document.getElementById('update-now-btn');
+        const updateDismissBtn = document.getElementById('update-dismiss-btn');
 
         // Función para mostrar la notificación de actualización
         const showUpdateToast = (registration) => {
           updateToast.classList.add('show');
+          
           updateNowBtn.onclick = () => {
             updateToast.classList.remove('show');
             if (registration.waiting) {
               registration.waiting.postMessage({ type: 'SKIP_WAITING' });
             }
+          };
+
+          updateDismissBtn.onclick = () => {
+            updateToast.classList.remove('show');
           };
         };
 
