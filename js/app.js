@@ -126,26 +126,37 @@ document.addEventListener('DOMContentLoaded', () => {
             'en-progreso': 'Mover a En Progreso',
             'terminadas': 'Mover a Terminadas'
         };
+        delete opciones[columnaActual]; // Elimina la columna actual de las opciones
 
-        // Elimina la columna actual de las opciones para no moverla a donde ya está
-        delete opciones[columnaActual];
+        // Genera el HTML para los botones de acción
+        let buttonsHtml = '';
+        for (const [columnaId, textoBoton] of Object.entries(opciones)) {
+            buttonsHtml += `<button class="swal-move-button" data-columna="${columnaId}">${textoBoton}</button>`;
+        }
 
         Swal.fire({
             title: 'Mover Tarea',
-            text: 'Selecciona el nuevo estado para esta tarea:',
-            input: 'select',
-            inputOptions: opciones,
-            inputPlaceholder: 'Seleccionar...',
+            html: `
+                <p class="swal-text">Selecciona el nuevo estado para esta tarea:</p>
+                <div class="swal-button-container">
+                    ${buttonsHtml}
+                </div>
+            `,
+            showConfirmButton: false,
             showCancelButton: true,
-            confirmButtonText: 'Mover',
             cancelButtonText: 'Cancelar',
-            confirmButtonColor: 'var(--color-primary)',
-        }).then((result) => {
-            if (result.isConfirmed && result.value) {
-                const nuevaColumnaId = result.value;
-                if (tareasCollection) {
-                    tareasCollection.doc(id).update({ columna: nuevaColumnaId });
-                }
+            didOpen: () => {
+                // Añade listeners a los botones personalizados
+                const container = Swal.getHtmlContainer();
+                container.querySelectorAll('.swal-move-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const nuevaColumnaId = button.dataset.columna;
+                        if (tareasCollection) {
+                            tareasCollection.doc(id).update({ columna: nuevaColumnaId });
+                        }
+                        Swal.close();
+                    });
+                });
             }
         });
     };
