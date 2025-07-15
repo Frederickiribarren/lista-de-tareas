@@ -121,42 +121,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para mostrar opciones de movimiento en móvil
     const mostrarOpcionesDeMovimiento = (id, columnaActual) => {
-        const opciones = {
-            'pendientes': 'Mover a Pendientes',
-            'en-progreso': 'Mover a En Progreso',
-            'terminadas': 'Mover a Terminadas'
-        };
-        delete opciones[columnaActual]; // Elimina la columna actual de las opciones
+        const opciones = [
+            { id: 'pendientes', texto: 'Mover a Pendientes', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>' },
+            { id: 'en-progreso', texto: 'Mover a En Progreso', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>' },
+            { id: 'terminadas', texto: 'Mover a Terminadas', icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' }
+        ];
 
-        // Genera el HTML para los botones de acción
+        const opcionesFiltradas = opciones.filter(op => op.id !== columnaActual);
+
         let buttonsHtml = '';
-        for (const [columnaId, textoBoton] of Object.entries(opciones)) {
-            buttonsHtml += `<button class="swal-move-button" data-columna="${columnaId}">${textoBoton}</button>`;
-        }
+        opcionesFiltradas.forEach(op => {
+            buttonsHtml += `<button class="swal-move-button" data-columna="${op.id}">${op.icon}<span>${op.texto}</span></button>`;
+        });
 
         Swal.fire({
             title: 'Mover Tarea',
-            html: `
-                <p class="swal-text">Selecciona el nuevo estado para esta tarea:</p>
-                <div class="swal-button-container">
-                    ${buttonsHtml}
-                </div>
-            `,
+            html: `<div class="swal-button-container">${buttonsHtml}</div>`,
             showConfirmButton: false,
-            showCancelButton: true,
-            cancelButtonText: 'Cancelar',
-            didOpen: () => {
-                // Añade listeners a los botones personalizados
-                const container = Swal.getHtmlContainer();
-                container.querySelectorAll('.swal-move-button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const nuevaColumnaId = button.dataset.columna;
-                        if (tareasCollection) {
-                            tareasCollection.doc(id).update({ columna: nuevaColumnaId });
-                        }
-                        Swal.close();
-                    });
-                });
+            showCancelButton: false, // El cierre se maneja con el overlay
+            customClass: {
+                popup: 'swal-move-menu'
             }
         });
     };
@@ -229,3 +213,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
