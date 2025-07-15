@@ -472,13 +472,22 @@ body {
   box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Alinea texto a la izq. y botones a la der. */
   gap: 20px;
   z-index: 1000;
   transition: bottom 0.5s ease-in-out;
+  width: 90%;
+  max-width: 500px;
 }
 
 .update-toast.show {
   bottom: 20px; /* Visible */
+}
+
+.update-toast-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .update-toast .btn-update {
@@ -490,6 +499,23 @@ body {
   cursor: pointer;
   font-weight: 500;
   font-family: 'Poppins', sans-serif;
+  white-space: nowrap; /* Evita que el texto se rompa */
+}
+
+.update-toast .btn-dismiss {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 5px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.update-toast .btn-dismiss:hover {
+  opacity: 1;
 }
 
 input[type="checkbox"] {
