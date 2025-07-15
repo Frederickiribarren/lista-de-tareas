@@ -141,6 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
             showCancelButton: false, // El cierre se maneja con el overlay
             customClass: {
                 popup: 'swal-move-menu'
+            },
+            didOpen: () => {
+                // Añade listeners a los botones personalizados una vez que el modal está abierto
+                const container = Swal.getHtmlContainer();
+                if (container) {
+                    container.querySelectorAll('.swal-move-button').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const nuevaColumnaId = button.dataset.columna;
+                            if (tareasCollection) {
+                                tareasCollection.doc(id).update({ columna: nuevaColumnaId });
+                            }
+                            Swal.close();
+                        });
+                    });
+                }
             }
         });
     };
