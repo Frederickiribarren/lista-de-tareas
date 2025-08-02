@@ -1,13 +1,4 @@
-# 📝 Lista de Tareas ### **📱 Experiencia de Usuario Moderna**
-- **Organización Visual**: Mueve tus tareas entre columnas ("Pendientes", "En Progreso", "Terminadas") para ver tu progreso de un vistazo
-- **Interfaz Responsiva**: Optimizada para móviles, tablets y escritorio
-- **Drag & Drop Inteligente**: Arrastra tareas en escritorio o usa el menú contextual en móviles
-- **Ordenamiento Inteligente**: Las tareas terminadas se ordenan automáticamente por fecha de finalización (más recientes arriba)**🔔 Sistema de Notificaciones Avanzado**
-- **Notificaciones Push**: Recibe alertas cuando agregues, completes o elimines tareas
-- **Recordatorios Programables**: Configura recordatorios únicos, diarios o semanales para tareas en progreso
-- **Feedback Visual**: Notificaciones toast elegantes para confirmaciones inmediatas
-- **Notificaciones en Segundo Plano**: Funciona incluso cuando la app está cerrada
-- **Gestión Inteligente**: Los recordatorios solo están disponibles para tareas "En Progreso"na - Una Aplicación Inteligente
+# 📝 Lista de Tareas Moderna - Una Aplicación Inteligente
 
 ![Banner de la Aplicación](https://via.placeholder.com/1200x400/6a11cb/FFFFFF?text=Lista+de+Tareas+Moderna)
 
@@ -137,15 +128,13 @@ lista-de-tareas/
 ### **🔔 Sistema de Notificaciones**
 - **Toast Notifications**: Feedback visual inmediato para todas las acciones
 - **Notificaciones Push**: Alertas del navegador para eventos importantes
-- **Recordatorios Programables**: Configura alertas para tareas en progreso únicamente
+- **Recordatorios Programables**: Configura alertas para tareas específicas
 - **Persistencia**: Los recordatorios se guardan localmente
-- **Eliminación Automática**: Los recordatorios se eliminan al mover tareas fuera de "En Progreso"
 
 ### **📱 Experiencia Móvil Optimizada**
 - **Menú Contextual**: Toca una tarea para ver opciones de movimiento
 - **Interfaz Responsiva**: Se adapta perfectamente a cualquier pantalla
 - **Gestos Intuitivos**: Diseñado para uso táctil
-- **Ordenamiento Automático**: Las tareas completadas se organizan por fecha de finalización
 
 ### **🔒 Seguridad Avanzada**
 - **Autenticación Robusta**: Sistema seguro con Firebase
@@ -200,12 +189,6 @@ lista-de-tareas/
 - ✅ Eliminación de funcionalidad PDF innecesaria
 - ✅ Reducción del tamaño de la aplicación
 - ✅ Mejor rendimiento y velocidad de carga
-
-#### **v7.2 - Mejoras en UX** 🆕
-- ✅ Recordatorios exclusivos para tareas "En Progreso"
-- ✅ Ordenamiento automático de tareas terminadas por fecha
-- ✅ Eliminación automática de recordatorios al mover tareas
-- ✅ Efectos visuales para tareas recién completadas
 
 ---
 

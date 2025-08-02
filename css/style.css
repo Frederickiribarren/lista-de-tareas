@@ -199,54 +199,6 @@ body {
     transform: scale(1.2);
 }
 
-/* Estilos especiales para tareas terminadas */
-#terminadas .tarea {
-    border-left: 3px solid #27ae60;
-    position: relative;
-}
-
-#terminadas .tarea:first-child {
-    border-left-color: var(--color-primary);
-    background: linear-gradient(135deg, 
-        rgba(106, 17, 203, 0.05), 
-        rgba(255, 255, 255, 1));
-}
-
-#terminadas .tarea:nth-child(2) {
-    border-left-color: #3498db;
-    background: linear-gradient(135deg, 
-        rgba(52, 152, 219, 0.03), 
-        rgba(255, 255, 255, 1));
-}
-
-#terminadas .tarea:nth-child(3) {
-    border-left-color: #e74c3c;
-    background: linear-gradient(135deg, 
-        rgba(231, 76, 60, 0.03), 
-        rgba(255, 255, 255, 1));
-}
-
-/* Efecto de animación para tareas recién completadas */
-#terminadas .tarea.nueva-completada {
-    animation: completada 0.8s ease-out;
-}
-
-@keyframes completada {
-    0% {
-        transform: scale(1.1) rotate(2deg);
-        box-shadow: 0 8px 25px rgba(106, 17, 203, 0.3);
-        border-left-color: #f39c12;
-    }
-    50% {
-        transform: scale(1.05) rotate(-1deg);
-        box-shadow: 0 6px 20px rgba(106, 17, 203, 0.2);
-    }
-    100% {
-        transform: scale(1) rotate(0deg);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-}
-
 /* --- ESTILOS DE AUTENTICACIÓN PARA ESCRITORIO Y MÓVIL --- */
 
 .auth-wrapper {
