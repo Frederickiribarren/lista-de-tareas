@@ -55,6 +55,25 @@ class TaskReminder {
     removeReminder(taskId) {
         this.reminders.delete(taskId);
         this.saveReminders();
+        
+        if (window.notificationManager) {
+            window.notificationManager.showInfoMessage('Recordatorio eliminado');
+        }
+    }
+
+    // Eliminar recordatorio cuando una tarea sale de "En Progreso"
+    removeReminderWhenTaskMoved(taskId, fromColumn, toColumn) {
+        if (fromColumn === 'en-progreso' && toColumn !== 'en-progreso') {
+            const reminder = this.reminders.get(taskId);
+            if (reminder) {
+                this.removeReminder(taskId);
+                if (window.notificationManager) {
+                    window.notificationManager.showInfoMessage(
+                        'Recordatorio eliminado: la tarea salió de "En Progreso"'
+                    );
+                }
+            }
+        }
     }
 
     // Verificar y disparar recordatorios
@@ -165,9 +184,10 @@ class TaskReminder {
 
 // Función para agregar botón de recordatorio a las tareas existentes
 function addReminderButtons() {
-    const tareas = document.querySelectorAll('.tarea');
+    // Solo agregar botones a las tareas en la columna "En Progreso"
+    const tareasEnProgreso = document.querySelectorAll('#en-progreso .tarea');
     
-    tareas.forEach(tarea => {
+    tareasEnProgreso.forEach(tarea => {
         // Verificar si ya tiene botón de recordatorio
         if (tarea.querySelector('.reminder-btn')) return;
         
@@ -182,6 +202,18 @@ function addReminderButtons() {
         });
         
         tarea.appendChild(reminderBtn);
+    });
+
+    // Remover botones de recordatorio de las tareas que NO están en "En Progreso"
+    const todasLasTareas = document.querySelectorAll('.tarea');
+    todasLasTareas.forEach(tarea => {
+        const columnaId = tarea.parentElement.id;
+        if (columnaId !== 'en-progreso') {
+            const reminderBtn = tarea.querySelector('.reminder-btn');
+            if (reminderBtn) {
+                reminderBtn.remove();
+            }
+        }
     });
 }
 
