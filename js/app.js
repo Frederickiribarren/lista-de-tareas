@@ -6,7 +6,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let userId = null;
     let tareasCollection;
     let unsubscribe; // Variable para guardar la función que detiene el listener
-    const isMobile = window.matchMedia("(max-width: 768px)").matches; // Detección de móvil más robusta
+    
+    // Detección de móvil más robusta
+    const isMobile = () => {
+        return window.matchMedia("(max-width: 768px)").matches || 
+               'ontouchstart' in window || 
+               navigator.maxTouchPoints > 0;
+    };
+
+    // Función para mejorar eventos táctiles en móvil
+    const addTouchSupport = (element, callback) => {
+        if (isMobile()) {
+            element.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                element.style.transform = 'scale(0.95)';
+            }, { passive: false });
+            
+            element.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                element.style.transform = '';
+                callback(e);
+            }, { passive: false });
+            
+            element.addEventListener('touchcancel', () => {
+                element.style.transform = '';
+            });
+        } else {
+            element.addEventListener('click', callback);
+        }
+    };
 
     // Escuchar el evento de inicio de sesión desde auth.js
     window.addEventListener('user-logged-in', (event) => {
@@ -129,10 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteIcon = document.createElement('span');
             deleteIcon.textContent = '✖';
             deleteIcon.classList.add('delete-icon');
-            deleteIcon.onclick = (event) => {
+            
+            // Usar soporte táctil mejorado para el botón de eliminar
+            addTouchSupport(deleteIcon, (event) => {
                 event.stopPropagation(); // Evita que el clic se propague a la tarea
                 eliminarTarea(id);
-            };
+            });
+            
             elementoTarea.appendChild(deleteIcon);
         }
 
@@ -147,9 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Lógica condicional para interacción
-        if (isMobile) {
+        if (isMobile()) {
             elementoTarea.setAttribute('draggable', 'false');
-            elementoTarea.addEventListener('click', () => mostrarOpcionesDeMovimiento(id, columnaId));
+            // Usar soporte táctil mejorado para mostrar opciones
+            addTouchSupport(elementoTarea, () => mostrarOpcionesDeMovimiento(id, columnaId));
         } else {
             addDragEvents(elementoTarea);
         }
@@ -372,7 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    btnAgregar.addEventListener('click', agregarTarea);
+    // Usar soporte táctil mejorado para el botón agregar
+    addTouchSupport(btnAgregar, agregarTarea);
+    
     nuevaTareaInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             agregarTarea();
