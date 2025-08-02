@@ -1,10 +1,11 @@
-const CACHE_NAME = 'lista-de-tareas-cache-v11'; // Versión actualizada sin PDF
+const CACHE_NAME = 'lista-de-tareas-cache-v12'; // Versión actualizada con mobile-utils
 const urlsToCache = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './js/auth.js',
+  './js/mobile-utils.js', // Utilidades móviles
   './js/notifications.js', // Sistema de notificaciones
   './js/reminders.js', // Sistema de recordatorios
   './images/icon-192.png',
