@@ -53,28 +53,21 @@ if (signUpButton && signInButton) {
 registerLink.addEventListener('click', (e) => {
     e.preventDefault();
     Swal.fire({
-        ...window.SweetAlertMobile.signupModal(),
+        title: 'Crear una Cuenta',
+        html:
+            `<input id="swal-email" class="swal2-input" placeholder="Correo electrónico" type="email" required>` +
+            `<input id="swal-password" class="swal2-input" placeholder="Contraseña (mín. 6 caracteres)" type="password" required>`,
+        confirmButtonText: 'Registrarse',
+        confirmButtonColor: 'var(--color-primary)',
+        focusConfirm: false,
         showLoaderOnConfirm: true,
         preConfirm: () => {
-            const email = Swal.getPopup().querySelector('#email').value;
-            const password = Swal.getPopup().querySelector('#password').value;
-            const confirmPassword = Swal.getPopup().querySelector('#confirmPassword').value;
-            
-            if (!email || !password || !confirmPassword) {
+            const email = Swal.getPopup().querySelector('#swal-email').value;
+            const password = Swal.getPopup().querySelector('#swal-password').value;
+            if (!email || !password) {
                 Swal.showValidationMessage(`Por favor, completa todos los campos`);
                 return false;
             }
-            
-            if (password !== confirmPassword) {
-                Swal.showValidationMessage(`Las contraseñas no coinciden`);
-                return false;
-            }
-            
-            if (password.length < 6) {
-                Swal.showValidationMessage(`La contraseña debe tener al menos 6 caracteres`);
-                return false;
-            }
-            
             return auth.createUserWithEmailAndPassword(email, password)
                 .catch(error => {
                     Swal.showValidationMessage(`Error: El correo ya está en uso o la contraseña es muy débil.`);
@@ -88,8 +81,7 @@ registerLink.addEventListener('click', (e) => {
                 title: '¡Registro exitoso!',
                 text: 'Ahora serás redirigido.',
                 timer: 1500,
-                showConfirmButton: false,
-                position: window.innerWidth <= 768 ? 'top' : 'center'
+                showConfirmButton: false
             });
         }
     });
@@ -100,7 +92,14 @@ registerLink.addEventListener('click', (e) => {
 forgotPasswordLink.addEventListener('click', (e) => {
     e.preventDefault();
     Swal.fire({
-        ...window.SweetAlertMobile.forgotPasswordModal(),
+        title: 'Restablecer Contraseña',
+        text: 'Ingresa tu correo electrónico para recibir un enlace de restablecimiento.',
+        input: 'email',
+        inputPlaceholder: 'tu.correo@ejemplo.com',
+        showCancelButton: true,
+        confirmButtonText: 'Enviar enlace',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: 'var(--color-primary)',
         showLoaderOnConfirm: true,
         preConfirm: (email) => {
             if (!email) {
@@ -127,8 +126,7 @@ forgotPasswordLink.addEventListener('click', (e) => {
                 icon: 'success',
                 title: '¡Enlace enviado!',
                 text: 'Revisa tu bandeja de entrada (y la carpeta de spam) para restablecer tu contraseña.',
-                confirmButtonColor: 'var(--color-primary)',
-                position: window.innerWidth <= 768 ? 'top' : 'center'
+                confirmButtonColor: 'var(--color-primary)'
             });
         }
     });
