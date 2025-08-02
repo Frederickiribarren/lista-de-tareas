@@ -2,7 +2,7 @@
 
 ## 🚀 Aplicación Web Progresiva (PWA) para gestión de tareas
 
-### 📅 Última actualización: 02 de August de 2025 a las 01:53 UTC
+### 📅 Última actualización: 02 de August de 2025 a las 02:07 UTC
 
 ## ✨ Características principales:
 
@@ -48,9 +48,9 @@
 ## 📊 Estadísticas del proyecto:
 
 - 📁 **Archivos principales**: 9
-- 📝 **Líneas de código**: 3240
+- 📝 **Líneas de código**: 3465
 - 🔧 **Commits**: 1
-- 📅 **Último commit**: 8d1e3b5 - � Implementar tema Verde Tóxico completo - Paleta verde neón con efectos visuales modernos (67 seconds ago)
+- 📅 **Último commit**: 98e6bb7 - Merge remote changes from main (26 seconds ago)
 
 ## 🚀 Cómo usar:
 

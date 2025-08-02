@@ -196,10 +196,33 @@ function addReminderButtons() {
         reminderBtn.innerHTML = '⏰';
         reminderBtn.title = 'Configurar recordatorio';
         
-        reminderBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showReminderDialog(tarea.id, tarea.querySelector('p').textContent);
-        });
+        // Mejorar soporte táctil para móviles
+        const isMobile = window.matchMedia("(max-width: 768px)").matches || 
+                         'ontouchstart' in window || 
+                         navigator.maxTouchPoints > 0;
+        
+        if (isMobile) {
+            reminderBtn.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                reminderBtn.style.transform = 'scale(0.95)';
+            }, { passive: false });
+            
+            reminderBtn.addEventListener('touchend', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                reminderBtn.style.transform = '';
+                showReminderDialog(tarea.id, tarea.querySelector('p').textContent);
+            }, { passive: false });
+            
+            reminderBtn.addEventListener('touchcancel', () => {
+                reminderBtn.style.transform = '';
+            });
+        } else {
+            reminderBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showReminderDialog(tarea.id, tarea.querySelector('p').textContent);
+            });
+        }
         
         tarea.appendChild(reminderBtn);
     });

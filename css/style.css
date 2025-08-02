@@ -1058,24 +1058,62 @@ input[type="checkbox"]:disabled::before {
 
 @media (max-width: 768px) {
     .containerPrincipal {
-        margin: 20px 10px;
-        padding: 20px;
+        margin: 10px;
+        padding: 15px;
+        min-height: calc(100vh - 20px);
     }
 
     .app-header {
         flex-direction: column;
         align-items: center;
-        gap: 20px;
+        gap: 15px;
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        background: var(--color-surface);
+        z-index: 100;
+        border-bottom: 2px solid rgba(57, 255, 20, 0.2);
+        margin-bottom: 20px;
     }
 
     .app-header h1 {
        text-align: center;
+       font-size: 2rem;
     }
 
     .header-actions {
         width: 100%;
         max-width: 320px;
         flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Arreglar el input-container para móvil */
+    .input-container {
+        flex-direction: column;
+        gap: 0;
+        border-radius: var(--border-radius);
+        overflow: visible;
+        margin-bottom: 25px;
+    }
+
+    .inputIngresar {
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 18px 20px;
+        min-height: 50px;
+    }
+
+    .btn-add {
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        padding: 18px 25px;
+        font-size: 1.6rem;
+        min-height: 60px;
+        width: 100%;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* Mostrar el texto en móvil y centrar contenido */
@@ -1086,11 +1124,56 @@ input[type="checkbox"]:disabled::before {
     .btn-secondary {
         width: 100%;
         justify-content: center;
-        padding: 12px 15px;
+        padding: 15px;
+        font-size: 16px;
+        min-height: 50px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .containerSecundario {
+    .columnas {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .columna {
+        margin-bottom: 20px;
+    }
+
+    /* Mejorar las tareas en móvil */
+    .tarea {
+        padding: 20px;
+        margin-bottom: 15px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+    }
+
+    .tarea p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    /* Mejorar botones de tarea */
+    .delete-icon {
+        padding: 12px;
+        font-size: 18px;
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .reminder-btn {
+        padding: 12px 16px;
+        font-size: 18px;
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* --- LÓGICA PARA VISTA MÓVIL (MODAL) --- */
@@ -1399,6 +1482,91 @@ input[type="checkbox"]:disabled::before {
 .reminder-btn:active {
     transform: translateY(0) scale(1.02);
     box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+}
+
+/* ===== MEJORAS ADICIONALES PARA MÓVIL ===== */
+
+/* Mejorar SweetAlert para móvil */
+@media (max-width: 768px) {
+    .swal2-popup {
+        font-size: 16px !important;
+        padding: 20px !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+    
+    .swal2-title {
+        font-size: 20px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .swal2-html-container {
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+    }
+    
+    .swal-button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 15px;
+    }
+    
+    .swal-move-button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        background: var(--color-surface-light);
+        border: 2px solid rgba(57, 255, 20, 0.2);
+        border-radius: var(--border-radius);
+        color: var(--color-text-primary);
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-height: 50px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .swal-move-button:active {
+        transform: scale(0.95);
+        background: var(--color-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-primary);
+    }
+    
+    .swal-move-button svg {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Prevenir zoom en inputs */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+    
+    /* Mejorar área táctil */
+    button, .btn, .reminder-btn, .delete-icon, [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Mejorar feedback visual en touch */
+    .tarea:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    .btn-add:active {
+        transform: scale(0.95);
+    }
+    
+    .btn-secondary:active {
+        transform: scale(0.95);
+    }
 }
 
 
