@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // onSnapshot escucha cambios en tiempo real.
         unsubscribe = tareasCollection.onSnapshot(snapshot => {
+            // Procesar todos los cambios
             snapshot.docChanges().forEach(change => {
                 const tarea = change.doc.data();
                 const id = change.doc.id;
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (change.type === 'added') {
                     // Solo renderizar si no existe ya en el DOM
                     if (!tareaElemento) {
-                        renderizarTarea(id, tarea.texto, tarea.columna);
+                        renderizarTarea(id, tarea.texto, tarea.columna, tarea.fechaFinalizacion);
                     }
                 }
                 if (change.type === 'modified') {
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tareaElemento) {
                         tareaElemento.remove();
                     }
-                    renderizarTarea(id, tarea.texto, tarea.columna);
+                    renderizarTarea(id, tarea.texto, tarea.columna, tarea.fechaFinalizacion);
                 }
                 if (change.type === 'removed') {
                     // Si la tarea existe, la eliminamos
@@ -57,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             });
+            
+            // Después de procesar todos los cambios, ordenar las tareas terminadas
+            ordenarTareasTerminadas();
         });
     };
 
@@ -76,7 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const nuevaTarea = {
             texto: sanitizedText,
-            columna: 'pendientes' // Todas las tareas nuevas van a pendientes
+            columna: 'pendientes', // Todas las tareas nuevas van a pendientes
+            fechaCreacion: new Date().toISOString(),
+            fechaFinalizacion: null
         };
 
         tareasCollection.add(nuevaTarea)
@@ -100,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Función para renderizar una tarea en el DOM
-    const renderizarTarea = (id, texto, columnaId) => {
+    const renderizarTarea = (id, texto, columnaId, fechaFinalizacion = null) => {
         const columna = document.getElementById(columnaId);
         if (!columna) return;
 
@@ -108,6 +114,11 @@ document.addEventListener('DOMContentLoaded', () => {
         elementoTarea.classList.add('tarea');
         elementoTarea.setAttribute('draggable', 'true');
         elementoTarea.id = id;
+        
+        // Agregar fecha de finalización como atributo para ordenar
+        if (fechaFinalizacion) {
+            elementoTarea.dataset.fechaFinalizacion = fechaFinalizacion;
+        }
 
         const p = document.createElement('p');
         p.textContent = texto;
@@ -144,6 +155,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Función para ordenar tareas terminadas por fecha de finalización (más recientes arriba)
+    const ordenarTareasTerminadas = () => {
+        const columnaTerminadas = document.getElementById('terminadas');
+        if (!columnaTerminadas) return;
+
+        const tareas = Array.from(columnaTerminadas.querySelectorAll('.tarea'));
+        
+        // Ordenar por fecha de finalización (más recientes primero)
+        tareas.sort((a, b) => {
+            const fechaA = a.dataset.fechaFinalizacion;
+            const fechaB = b.dataset.fechaFinalizacion;
+            
+            if (!fechaA && !fechaB) return 0;
+            if (!fechaA) return 1;
+            if (!fechaB) return -1;
+            
+            return new Date(fechaB) - new Date(fechaA);
+        });
+
+        // Reordenar en el DOM
+        tareas.forEach(tarea => {
+            columnaTerminadas.appendChild(tarea);
+        });
+    };
+
     // Función para mostrar opciones de movimiento en móvil
     const mostrarOpcionesDeMovimiento = (id, columnaActual) => {
         const opciones = [
@@ -176,9 +212,21 @@ document.addEventListener('DOMContentLoaded', () => {
                             const nuevaColumnaId = button.dataset.columna;
                             const tareaElement = document.getElementById(id);
                             const tareaTexto = tareaElement ? tareaElement.querySelector('p').textContent : '';
+                            const columnaAnteriorId = tareaElement ? tareaElement.parentElement.id : '';
                             
                             if (tareasCollection) {
-                                tareasCollection.doc(id).update({ columna: nuevaColumnaId })
+                                // Preparar datos de actualización
+                                const updateData = { columna: nuevaColumnaId };
+                                
+                                // Si se mueve a terminadas, agregar fecha de finalización
+                                if (nuevaColumnaId === 'terminadas') {
+                                    updateData.fechaFinalizacion = new Date().toISOString();
+                                } else if (columnaAnteriorId === 'terminadas') {
+                                    // Si se saca de terminadas, quitar fecha de finalización
+                                    updateData.fechaFinalizacion = null;
+                                }
+                                
+                                tareasCollection.doc(id).update(updateData)
                                 .then(() => {
                                     // Notificar cuando se completa una tarea
                                     if (nuevaColumnaId === 'terminadas' && window.notificationManager) {
@@ -186,6 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                         if (window.notificationManager.areNotificationsEnabled()) {
                                             window.notificationManager.notifyTaskCompleted(tareaTexto);
                                         }
+                                    }
+                                    
+                                    // Manejar recordatorios cuando se mueve la tarea
+                                    if (window.taskReminder) {
+                                        window.taskReminder.removeReminderWhenTaskMoved(id, columnaAnteriorId, nuevaColumnaId);
                                     }
                                 })
                                 .catch(error => {
@@ -229,6 +282,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: 'success',
                         confirmButtonColor: 'var(--color-primary)'
                     });
+                    
+                    // Eliminar recordatorio asociado si existe
+                    if (window.taskReminder) {
+                        window.taskReminder.removeReminder(id);
+                    }
                     
                     // Notificación de tarea eliminada
                     if (window.notificationManager) {
@@ -277,7 +335,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Actualizamos el documento en Firestore.
                 // El listener onSnapshot se encargará de mover el elemento en la UI.
                 if (tareasCollection) {
-                    tareasCollection.doc(id).update({ columna: nuevaColumnaId })
+                    // Preparar datos de actualización
+                    const updateData = { columna: nuevaColumnaId };
+                    
+                    // Si se mueve a terminadas, agregar fecha de finalización
+                    if (nuevaColumnaId === 'terminadas') {
+                        updateData.fechaFinalizacion = new Date().toISOString();
+                    } else if (columnaAnteriorId === 'terminadas') {
+                        // Si se saca de terminadas, quitar fecha de finalización
+                        updateData.fechaFinalizacion = null;
+                    }
+                    
+                    tareasCollection.doc(id).update(updateData)
                     .then(() => {
                         // Notificar cuando se completa una tarea por drag & drop
                         if (nuevaColumnaId === 'terminadas' && columnaAnteriorId !== 'terminadas' && window.notificationManager) {
@@ -285,6 +354,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (window.notificationManager.areNotificationsEnabled()) {
                                 window.notificationManager.notifyTaskCompleted(tareaTexto);
                             }
+                        }
+                        
+                        // Manejar recordatorios cuando se mueve la tarea por drag & drop
+                        if (window.taskReminder) {
+                            window.taskReminder.removeReminderWhenTaskMoved(id, columnaAnteriorId, nuevaColumnaId);
                         }
                     })
                     .catch(error => {

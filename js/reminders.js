@@ -55,6 +55,25 @@ class TaskReminder {
     removeReminder(taskId) {
         this.reminders.delete(taskId);
         this.saveReminders();
+        
+        if (window.notificationManager) {
+            window.notificationManager.showInfoMessage('Recordatorio eliminado');
+        }
+    }
+
+    // Eliminar recordatorio cuando una tarea sale de "En Progreso"
+    removeReminderWhenTaskMoved(taskId, fromColumn, toColumn) {
+        if (fromColumn === 'en-progreso' && toColumn !== 'en-progreso') {
+            const reminder = this.reminders.get(taskId);
+            if (reminder) {
+                this.removeReminder(taskId);
+                if (window.notificationManager) {
+                    window.notificationManager.showInfoMessage(
+                        'Recordatorio eliminado: la tarea salió de "En Progreso"'
+                    );
+                }
+            }
+        }
     }
 
     // Verificar y disparar recordatorios
