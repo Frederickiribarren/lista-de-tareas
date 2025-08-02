@@ -1,13 +1,40 @@
 :root {
-    --color-primary: #6a11cb;
-    --color-secondary: #2575fc;
-    --color-background: #f4f7f6;
-    --color-surface: #ffffff;
-    --color-text-primary: #333333;
-    --color-text-secondary: #757575;
-    --color-danger: #e74c3c;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    /* Paleta Verde Tóxico - Colores principales */
+    --color-primary: #39ff14;           /* Verde tóxico brillante */
+    --color-primary-dark: #2ecc11;      /* Verde tóxico más oscuro */
+    --color-primary-light: #66ff47;     /* Verde tóxico claro */
+    --color-secondary: #1a1a1a;         /* Negro profundo para contraste */
+    --color-accent: #00ffff;            /* Cian eléctrico */
+    --color-warning: #ffff00;           /* Amarillo neón */
+    --color-danger: #ff073a;            /* Rojo neón */
+    
+    /* Fondos y superficies */
+    --color-background: #0a0a0a;        /* Fondo negro profundo */
+    --color-surface: #1a1a1a;           /* Superficie gris muy oscuro */
+    --color-surface-light: #2a2a2a;     /* Superficie gris oscuro */
+    --color-card: #1e1e1e;              /* Color de tarjetas */
+    
+    /* Textos */
+    --color-text-primary: #39ff14;      /* Texto principal verde tóxico */
+    --color-text-secondary: #cccccc;    /* Texto secundario gris claro */
+    --color-text-muted: #666666;        /* Texto apagado */
+    --color-text-inverse: #000000;      /* Texto inverso (negro sobre verde) */
+    
+    /* Estados de tareas con tema verde tóxico */
+    --color-pending: #ffff00;           /* Amarillo neón para pendientes */
+    --color-progress: #39ff14;          /* Verde tóxico para en progreso */
+    --color-completed: #00ffff;         /* Cian para completadas */
+    
+    /* Efectos y sombras */
+    --shadow: 0 4px 20px rgba(57, 255, 20, 0.15);
+    --shadow-hover: 0 8px 30px rgba(57, 255, 20, 0.25);
+    --shadow-glow: 0 0 20px rgba(57, 255, 20, 0.3);
     --border-radius: 12px;
+    
+    /* Gradientes temáticos */
+    --gradient-primary: linear-gradient(135deg, #39ff14 0%, #2ecc11 100%);
+    --gradient-secondary: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    --gradient-accent: linear-gradient(135deg, #00ffff 0%, #39ff14 100%);
 }
 
 * {
@@ -18,31 +45,43 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--color-background);
+    background: var(--color-background);
     color: var(--color-text-primary);
     line-height: 1.6;
+    min-height: 100vh;
+    /* Efecto de resplandor sutil en el fondo */
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(57, 255, 20, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%);
 }
 
 .containerPrincipal {
     max-width: 1200px;
     margin: 40px auto;
     padding: 30px;
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(57, 255, 20, 0.1);
 }
 
 .app-header {
-    display: flex; /* Cambiado a flex para mejor alineación */
-    justify-content: space-between; /* Alinea título a la izq. y botones a la der. */
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 30px;
     gap: 20px;
+    padding: 20px 0;
+    border-bottom: 2px solid rgba(57, 255, 20, 0.2);
 }
 
 .app-header h1 {
-    /* Se eliminan las propiedades de grid */
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 2.5rem;
+    font-weight: 700;
     color: var(--color-primary);
+    text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+    letter-spacing: -0.5px;
 }
 
 .input-container {
@@ -51,21 +90,33 @@ body {
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);
     overflow: hidden;
+    border: 2px solid rgba(57, 255, 20, 0.2);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow);
 }
 
 .inputIngresar {
     flex-grow: 1;
-    border: 1px solid #e0e0e0;
-    border-right: none;
+    border: none;
+    background: var(--color-surface-light);
+    color: var(--color-text-primary);
     padding: 15px 20px;
     font-size: 1rem;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     outline: none;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.inputIngresar::placeholder {
+    color: var(--color-text-muted);
 }
 
 .inputIngresar:focus {
-    border-color: var(--color-primary);
+    background: var(--color-surface);
     z-index: 1;
     position: relative;
 }
@@ -74,31 +125,33 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid transparent;
-    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
-    color: white;
+    border: none;
+    background: var(--gradient-primary);
+    color: var(--color-text-inverse);
     font-size: 1.8rem;
-    font-weight: 400;
+    font-weight: 600;
     padding: 15px 25px;
     cursor: pointer;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
 .btn-add:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3);
+    box-shadow: var(--shadow-hover);
+    background: var(--color-primary-light);
 }
 
 .btn-add:active {
     transform: scale(0.98);
-    box-shadow: none;
+    box-shadow: var(--shadow-glow);
 }
 
 /* Contenedor para los botones del header */
 .header-actions {
     display: flex;
-    gap: 10px;
+    gap: 15px;
 }
 
 /* Estilo base para los botones secundarios (Salir) */
@@ -106,23 +159,24 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 15px;
-    background-color: var(--color-surface);
+    padding: 12px 18px;
+    background: var(--color-surface-light);
     color: var(--color-text-secondary);
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    border: 2px solid rgba(57, 255, 20, 0.2);
+    border-radius: var(--border-radius);
     cursor: pointer;
+    text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary:hover {
-    border-color: var(--color-primary);
+    background: var(--color-surface);
     color: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .btn-secondary svg {
@@ -142,47 +196,110 @@ body {
     gap: 25px;
 }
 
+.columnas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.columna {
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    border: 2px solid rgba(57, 255, 20, 0.1);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.columna:hover {
+    border-color: rgba(57, 255, 20, 0.3);
+    box-shadow: var(--shadow-hover);
+}
+
 .columna h2 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #eee;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(57, 255, 20, 0.2);
     color: var(--color-text-primary);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilos específicos para cada columna */
+#pendientes h2 {
+    color: var(--color-pending);
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+#en-progreso h2 {
+    color: var(--color-progress);
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+#terminadas h2 {
+    color: var(--color-completed);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
 .tareas-container {
-    background-color: rgba(0, 0, 0, 0.02);
+    background: var(--color-surface-light);
     border-radius: var(--border-radius);
     padding: 15px;
-    min-height: 200px;
+    min-height: 250px;
+    border: 1px solid rgba(57, 255, 20, 0.1);
 }
 
 .tarea {
-    background-color: var(--color-surface);
-    padding: 15px;
+    background: var(--color-card);
+    padding: 18px;
     margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(57, 255, 20, 0.2);
     display: flex;
     align-items: center;
     gap: 15px;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de brillo sutil en las tareas */
+.tarea::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.1), transparent);
+    transition: left 0.5s ease;
 }
 
 .tarea:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+}
+
+.tarea:hover::before {
+    left: 100%;
 }
 
 .tarea.dragging {
-    opacity: 0.5;
-    transform: rotate(3deg);
+    opacity: 0.7;
+    transform: rotate(3deg) scale(1.05);
+    box-shadow: var(--shadow-hover);
 }
 
 .tarea p {
     flex-grow: 1;
     margin: 0;
+    color: var(--color-text-secondary);
+    font-weight: 500;
 }
 
 /* Estilos para el icono de eliminar */
@@ -190,13 +307,20 @@ body {
     cursor: pointer;
     color: var(--color-text-secondary);
     font-weight: bold;
-    padding-left: 10px; /* Añade un poco de espacio */
-    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    background: transparent;
+    border: 2px solid transparent;
 }
 
 .delete-icon:hover {
     color: var(--color-danger);
-    transform: scale(1.2);
+    background: rgba(255, 7, 58, 0.1);
+    border-color: var(--color-danger);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 7, 58, 0.3);
 }
 
 /* Estilos especiales para tareas terminadas */
@@ -1233,27 +1357,48 @@ input[type="checkbox"]:disabled::before {
     }
 }
 
-/* Botón para configurar recordatorios (opcional) */
+/* Botón para configurar recordatorios */
 .reminder-btn {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
+    background: var(--gradient-primary);
+    border: 2px solid rgba(57, 255, 20, 0.3);
+    color: var(--color-text-inverse);
+    padding: 10px 14px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     transition: all 0.3s ease;
-    margin-left: 8px;
+    margin-left: 10px;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.reminder-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.3s ease;
 }
 
 .reminder-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.reminder-btn:hover::before {
+    left: 100%;
 }
 
 .reminder-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(1.02);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
 }
 
 
