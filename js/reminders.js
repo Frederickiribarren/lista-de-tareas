@@ -55,6 +55,25 @@ class TaskReminder {
     removeReminder(taskId) {
         this.reminders.delete(taskId);
         this.saveReminders();
+        
+        if (window.notificationManager) {
+            window.notificationManager.showInfoMessage('Recordatorio eliminado');
+        }
+    }
+
+    // Eliminar recordatorio cuando una tarea sale de "En Progreso"
+    removeReminderWhenTaskMoved(taskId, fromColumn, toColumn) {
+        if (fromColumn === 'en-progreso' && toColumn !== 'en-progreso') {
+            const reminder = this.reminders.get(taskId);
+            if (reminder) {
+                this.removeReminder(taskId);
+                if (window.notificationManager) {
+                    window.notificationManager.showInfoMessage(
+                        'Recordatorio eliminado: la tarea salió de "En Progreso"'
+                    );
+                }
+            }
+        }
     }
 
     // Verificar y disparar recordatorios
@@ -177,10 +196,33 @@ function addReminderButtons() {
         reminderBtn.innerHTML = '⏰';
         reminderBtn.title = 'Configurar recordatorio';
         
-        reminderBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showReminderDialog(tarea.id, tarea.querySelector('p').textContent);
-        });
+        // Mejorar soporte táctil para móviles
+        const isMobile = window.matchMedia("(max-width: 768px)").matches || 
+                         'ontouchstart' in window || 
+                         navigator.maxTouchPoints > 0;
+        
+        if (isMobile) {
+            reminderBtn.addEventListener('touchstart', (e) => {
+                e.stopPropagation();
+                reminderBtn.style.transform = 'scale(0.95)';
+            }, { passive: false });
+            
+            reminderBtn.addEventListener('touchend', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                reminderBtn.style.transform = '';
+                showReminderDialog(tarea.id, tarea.querySelector('p').textContent);
+            }, { passive: false });
+            
+            reminderBtn.addEventListener('touchcancel', () => {
+                reminderBtn.style.transform = '';
+            });
+        } else {
+            reminderBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showReminderDialog(tarea.id, tarea.querySelector('p').textContent);
+            });
+        }
         
         tarea.appendChild(reminderBtn);
     });

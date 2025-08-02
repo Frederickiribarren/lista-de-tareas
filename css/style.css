@@ -1,13 +1,40 @@
 :root {
-    --color-primary: #6a11cb;
-    --color-secondary: #2575fc;
-    --color-background: #f4f7f6;
-    --color-surface: #ffffff;
-    --color-text-primary: #333333;
-    --color-text-secondary: #757575;
-    --color-danger: #e74c3c;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    /* Paleta Verde Tóxico - Colores principales */
+    --color-primary: #39ff14;           /* Verde tóxico brillante */
+    --color-primary-dark: #2ecc11;      /* Verde tóxico más oscuro */
+    --color-primary-light: #66ff47;     /* Verde tóxico claro */
+    --color-secondary: #1a1a1a;         /* Negro profundo para contraste */
+    --color-accent: #00ffff;            /* Cian eléctrico */
+    --color-warning: #ffff00;           /* Amarillo neón */
+    --color-danger: #ff073a;            /* Rojo neón */
+    
+    /* Fondos y superficies */
+    --color-background: #0a0a0a;        /* Fondo negro profundo */
+    --color-surface: #1a1a1a;           /* Superficie gris muy oscuro */
+    --color-surface-light: #2a2a2a;     /* Superficie gris oscuro */
+    --color-card: #1e1e1e;              /* Color de tarjetas */
+    
+    /* Textos */
+    --color-text-primary: #39ff14;      /* Texto principal verde tóxico */
+    --color-text-secondary: #cccccc;    /* Texto secundario gris claro */
+    --color-text-muted: #666666;        /* Texto apagado */
+    --color-text-inverse: #000000;      /* Texto inverso (negro sobre verde) */
+    
+    /* Estados de tareas con tema verde tóxico */
+    --color-pending: #ffff00;           /* Amarillo neón para pendientes */
+    --color-progress: #39ff14;          /* Verde tóxico para en progreso */
+    --color-completed: #00ffff;         /* Cian para completadas */
+    
+    /* Efectos y sombras */
+    --shadow: 0 4px 20px rgba(57, 255, 20, 0.15);
+    --shadow-hover: 0 8px 30px rgba(57, 255, 20, 0.25);
+    --shadow-glow: 0 0 20px rgba(57, 255, 20, 0.3);
     --border-radius: 12px;
+    
+    /* Gradientes temáticos */
+    --gradient-primary: linear-gradient(135deg, #39ff14 0%, #2ecc11 100%);
+    --gradient-secondary: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    --gradient-accent: linear-gradient(135deg, #00ffff 0%, #39ff14 100%);
 }
 
 * {
@@ -18,31 +45,43 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--color-background);
+    background: var(--color-background);
     color: var(--color-text-primary);
     line-height: 1.6;
+    min-height: 100vh;
+    /* Efecto de resplandor sutil en el fondo */
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(57, 255, 20, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.03) 0%, transparent 50%);
 }
 
 .containerPrincipal {
     max-width: 1200px;
     margin: 40px auto;
     padding: 30px;
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(57, 255, 20, 0.1);
 }
 
 .app-header {
-    display: flex; /* Cambiado a flex para mejor alineación */
-    justify-content: space-between; /* Alinea título a la izq. y botones a la der. */
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 30px;
     gap: 20px;
+    padding: 20px 0;
+    border-bottom: 2px solid rgba(57, 255, 20, 0.2);
 }
 
 .app-header h1 {
-    /* Se eliminan las propiedades de grid */
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 2.5rem;
+    font-weight: 700;
     color: var(--color-primary);
+    text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+    letter-spacing: -0.5px;
 }
 
 .input-container {
@@ -51,21 +90,33 @@ body {
     box-shadow: var(--shadow);
     border-radius: var(--border-radius);
     overflow: hidden;
+    border: 2px solid rgba(57, 255, 20, 0.2);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow);
 }
 
 .inputIngresar {
     flex-grow: 1;
-    border: 1px solid #e0e0e0;
-    border-right: none;
+    border: none;
+    background: var(--color-surface-light);
+    color: var(--color-text-primary);
     padding: 15px 20px;
     font-size: 1rem;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     outline: none;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.inputIngresar::placeholder {
+    color: var(--color-text-muted);
 }
 
 .inputIngresar:focus {
-    border-color: var(--color-primary);
+    background: var(--color-surface);
     z-index: 1;
     position: relative;
 }
@@ -74,31 +125,33 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid transparent;
-    background: linear-gradient(45deg, var(--color-primary), var(--color-secondary));
-    color: white;
+    border: none;
+    background: var(--gradient-primary);
+    color: var(--color-text-inverse);
     font-size: 1.8rem;
-    font-weight: 400;
+    font-weight: 600;
     padding: 15px 25px;
     cursor: pointer;
     border-radius: 0 var(--border-radius) var(--border-radius) 0;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
 }
 
 .btn-add:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3);
+    box-shadow: var(--shadow-hover);
+    background: var(--color-primary-light);
 }
 
 .btn-add:active {
     transform: scale(0.98);
-    box-shadow: none;
+    box-shadow: var(--shadow-glow);
 }
 
 /* Contenedor para los botones del header */
 .header-actions {
     display: flex;
-    gap: 10px;
+    gap: 15px;
 }
 
 /* Estilo base para los botones secundarios (Salir) */
@@ -106,23 +159,24 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 15px;
-    background-color: var(--color-surface);
+    padding: 12px 18px;
+    background: var(--color-surface-light);
     color: var(--color-text-secondary);
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    border: 2px solid rgba(57, 255, 20, 0.2);
+    border-radius: var(--border-radius);
     cursor: pointer;
+    text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .btn-secondary:hover {
-    border-color: var(--color-primary);
+    background: var(--color-surface);
     color: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .btn-secondary svg {
@@ -142,47 +196,110 @@ body {
     gap: 25px;
 }
 
+.columnas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.columna {
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    border: 2px solid rgba(57, 255, 20, 0.1);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.columna:hover {
+    border-color: rgba(57, 255, 20, 0.3);
+    box-shadow: var(--shadow-hover);
+}
+
 .columna h2 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #eee;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(57, 255, 20, 0.2);
     color: var(--color-text-primary);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilos específicos para cada columna */
+#pendientes h2 {
+    color: var(--color-pending);
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+#en-progreso h2 {
+    color: var(--color-progress);
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+#terminadas h2 {
+    color: var(--color-completed);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
 }
 
 .tareas-container {
-    background-color: rgba(0, 0, 0, 0.02);
+    background: var(--color-surface-light);
     border-radius: var(--border-radius);
     padding: 15px;
-    min-height: 200px;
+    min-height: 250px;
+    border: 1px solid rgba(57, 255, 20, 0.1);
 }
 
 .tarea {
-    background-color: var(--color-surface);
-    padding: 15px;
+    background: var(--color-card);
+    padding: 18px;
     margin-bottom: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(57, 255, 20, 0.2);
     display: flex;
     align-items: center;
     gap: 15px;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de brillo sutil en las tareas */
+.tarea::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(57, 255, 20, 0.1), transparent);
+    transition: left 0.5s ease;
 }
 
 .tarea:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+}
+
+.tarea:hover::before {
+    left: 100%;
 }
 
 .tarea.dragging {
-    opacity: 0.5;
-    transform: rotate(3deg);
+    opacity: 0.7;
+    transform: rotate(3deg) scale(1.05);
+    box-shadow: var(--shadow-hover);
 }
 
 .tarea p {
     flex-grow: 1;
     margin: 0;
+    color: var(--color-text-secondary);
+    font-weight: 500;
 }
 
 /* Estilos para el icono de eliminar */
@@ -190,13 +307,339 @@ body {
     cursor: pointer;
     color: var(--color-text-secondary);
     font-weight: bold;
-    padding-left: 10px; /* Añade un poco de espacio */
-    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    background: transparent;
+    border: 2px solid transparent;
 }
 
 .delete-icon:hover {
     color: var(--color-danger);
-    transform: scale(1.2);
+    background: rgba(255, 7, 58, 0.1);
+    border-color: var(--color-danger);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 7, 58, 0.3);
+}
+
+/* Estilos especiales para tareas terminadas */
+#terminadas .tarea {
+    border-left: 3px solid #27ae60;
+    position: relative;
+}
+
+#terminadas .tarea:first-child {
+    border-left-color: var(--color-primary);
+    background: linear-gradient(135deg, 
+        rgba(106, 17, 203, 0.05), 
+        rgba(255, 255, 255, 1));
+}
+
+#terminadas .tarea:nth-child(2) {
+    border-left-color: #3498db;
+    background: linear-gradient(135deg, 
+        rgba(52, 152, 219, 0.03), 
+        rgba(255, 255, 255, 1));
+}
+
+#terminadas .tarea:nth-child(3) {
+    border-left-color: #e74c3c;
+    background: linear-gradient(135deg, 
+        rgba(231, 76, 60, 0.03), 
+        rgba(255, 255, 255, 1));
+}
+
+/* Efecto de animación para tareas recién completadas */
+#terminadas .tarea.nueva-completada {
+    animation: completada 0.8s ease-out;
+}
+
+@keyframes completada {
+    0% {
+        transform: scale(1.1) rotate(2deg);
+        box-shadow: 0 8px 25px rgba(106, 17, 203, 0.3);
+        border-left-color: #f39c12;
+    }
+    50% {
+        transform: scale(1.05) rotate(-1deg);
+        box-shadow: 0 6px 20px rgba(106, 17, 203, 0.2);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+}
+
+/* ============================================
+   ESTILOS PARA SWEETALERT2 - OPTIMIZACIÓN MÓVIL
+============================================ */
+
+/* Configuración global para SweetAlert2 */
+.swal2-popup {
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+    border: none !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Posicionamiento optimizado para móviles */
+@media (max-width: 768px) {
+    .swal2-container {
+        padding: 10px !important;
+        align-items: flex-start !important;
+        padding-top: 20px !important;
+    }
+    
+    .swal2-popup {
+        width: calc(100% - 20px) !important;
+        max-width: 400px !important;
+        margin-top: 0 !important;
+        transform: none !important;
+        position: relative !important;
+        top: 0 !important;
+    }
+    
+    /* Cuando aparece el teclado virtual */
+    .swal2-container.keyboard-visible {
+        align-items: flex-start !important;
+        padding-top: 10px !important;
+    }
+    
+    .swal2-container.keyboard-visible .swal2-popup {
+        margin-top: 0 !important;
+        max-height: 60vh !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* Estilos para inputs en SweetAlert */
+.swal2-input {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    font-size: 16px !important; /* Evita zoom en iOS */
+    transition: border-color 0.3s ease !important;
+}
+
+.swal2-input:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1) !important;
+    outline: none !important;
+}
+
+/* Botones personalizados */
+.swal2-confirm {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal2-confirm:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3) !important;
+}
+
+.swal2-cancel {
+    border: 2px solid #e0e0e0 !important;
+    background: white !important;
+    color: var(--color-text-secondary) !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal2-cancel:hover {
+    border-color: var(--color-text-secondary) !important;
+    background: #f8f9fa !important;
+}
+
+/* Títulos y texto */
+.swal2-title {
+    color: var(--color-text-primary) !important;
+    font-weight: 600 !important;
+    font-size: 1.4rem !important;
+    margin-bottom: 16px !important;
+}
+
+.swal2-html-container {
+    color: var(--color-text-secondary) !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+/* Animaciones mejoradas */
+.swal2-show {
+    animation: swal2-show-improved 0.3s ease-out !important;
+}
+
+.swal2-hide {
+    animation: swal2-hide-improved 0.2s ease-in !important;
+}
+
+@keyframes swal2-show-improved {
+    0% {
+        transform: translateY(-30px) scale(0.9);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   MEJORAS ADICIONALES PARA MÓVILES
+============================================ */
+
+/* Prevenir zoom en iOS */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+textarea, 
+select {
+    font-size: 16px !important;
+}
+
+/* Clase para body cuando el teclado está visible */
+body.keyboard-visible {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Mejoras para contenedores móviles */
+@media (max-width: 768px) {
+    /* Ajustar contenedor principal */
+    .contenido {
+        padding: 10px;
+        margin-top: 80px; /* Más espacio para el header */
+    }
+    
+    /* Mejorar el header en móviles */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Ajustar formularios de tarea */
+    .form-agregar-tarea {
+        position: sticky;
+        top: 70px;
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        z-index: 100;
+    }
+    
+    /* Mejorar inputs de formulario */
+    .form-agregar-tarea input {
+        font-size: 16px !important;
+        padding: 12px 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+    }
+    
+    .form-agregar-tarea input:focus {
+        border-color: var(--color-primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+    }
+    
+    /* Botones más grandes para móvil */
+    .btn-agregar {
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        min-height: 48px;
+        touch-action: manipulation;
+    }
+    
+    /* Mejorar tarjetas de tarea */
+    .tarea {
+        margin-bottom: 12px;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Botones de tarea más accesibles */
+    .tarea .btn {
+        min-height: 40px;
+        min-width: 40px;
+        font-size: 14px;
+        margin: 2px;
+        touch-action: manipulation;
+    }
+    
+    /* Mejorar área de scroll */
+    .tareas-container {
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
+        padding-right: 5px;
+    }
+    
+    /* Personalizar scrollbar para móvil */
+    .tareas-container::-webkit-scrollbar {
+        width: 4px;
+    }
+    
+    .tareas-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    .tareas-container::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+    }
+}
+
+/* Clase para inputs que están en focus (prevenir zoom iOS) */
+.swal2-input:focus,
+input:focus,
+textarea:focus {
+    transform: translateZ(0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Mejorar la accesibilidad táctil */
+@media (hover: none) and (pointer: coarse) {
+    /* Dispositivos táctiles */
+    .btn, button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 8px 16px;
+    }
+    
+    .tarea .btn {
+        min-height: 40px;
+        min-width: 40px;
+    }
+    
+    /* Aumentar área táctil para elementos pequeños */
+    .btn-eliminar::before,
+    .btn-completar::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: -8px;
+        right: -8px;
+        bottom: -8px;
+        z-index: -1;
+    }
 }
 
 /* --- ESTILOS DE AUTENTICACIÓN PARA ESCRITORIO Y MÓVIL --- */
@@ -615,24 +1058,62 @@ input[type="checkbox"]:disabled::before {
 
 @media (max-width: 768px) {
     .containerPrincipal {
-        margin: 20px 10px;
-        padding: 20px;
+        margin: 10px;
+        padding: 15px;
+        min-height: calc(100vh - 20px);
     }
 
     .app-header {
         flex-direction: column;
         align-items: center;
-        gap: 20px;
+        gap: 15px;
+        padding: 15px 0;
+        position: sticky;
+        top: 0;
+        background: var(--color-surface);
+        z-index: 100;
+        border-bottom: 2px solid rgba(57, 255, 20, 0.2);
+        margin-bottom: 20px;
     }
 
     .app-header h1 {
        text-align: center;
+       font-size: 2rem;
     }
 
     .header-actions {
         width: 100%;
         max-width: 320px;
         flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Arreglar el input-container para móvil */
+    .input-container {
+        flex-direction: column;
+        gap: 0;
+        border-radius: var(--border-radius);
+        overflow: visible;
+        margin-bottom: 25px;
+    }
+
+    .inputIngresar {
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+        font-size: 16px; /* Evita zoom en iOS */
+        padding: 18px 20px;
+        min-height: 50px;
+    }
+
+    .btn-add {
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        padding: 18px 25px;
+        font-size: 1.6rem;
+        min-height: 60px;
+        width: 100%;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* Mostrar el texto en móvil y centrar contenido */
@@ -643,11 +1124,56 @@ input[type="checkbox"]:disabled::before {
     .btn-secondary {
         width: 100%;
         justify-content: center;
-        padding: 12px 15px;
+        padding: 15px;
+        font-size: 16px;
+        min-height: 50px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .containerSecundario {
+    .columnas {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .columna {
+        margin-bottom: 20px;
+    }
+
+    /* Mejorar las tareas en móvil */
+    .tarea {
+        padding: 20px;
+        margin-bottom: 15px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
+    }
+
+    .tarea p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    /* Mejorar botones de tarea */
+    .delete-icon {
+        padding: 12px;
+        font-size: 18px;
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .reminder-btn {
+        padding: 12px 16px;
+        font-size: 18px;
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* --- LÓGICA PARA VISTA MÓVIL (MODAL) --- */
@@ -914,27 +1440,133 @@ input[type="checkbox"]:disabled::before {
     }
 }
 
-/* Botón para configurar recordatorios (opcional) */
+/* Botón para configurar recordatorios */
 .reminder-btn {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    border: none;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
+    background: var(--gradient-primary);
+    border: 2px solid rgba(57, 255, 20, 0.3);
+    color: var(--color-text-inverse);
+    padding: 10px 14px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 16px;
+    font-weight: 600;
     transition: all 0.3s ease;
-    margin-left: 8px;
+    margin-left: 10px;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.reminder-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.3s ease;
 }
 
 .reminder-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.reminder-btn:hover::before {
+    left: 100%;
 }
 
 .reminder-btn:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(1.02);
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+}
+
+/* ===== MEJORAS ADICIONALES PARA MÓVIL ===== */
+
+/* Mejorar SweetAlert para móvil */
+@media (max-width: 768px) {
+    .swal2-popup {
+        font-size: 16px !important;
+        padding: 20px !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+    
+    .swal2-title {
+        font-size: 20px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .swal2-html-container {
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+    }
+    
+    .swal-button-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 15px;
+    }
+    
+    .swal-move-button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        background: var(--color-surface-light);
+        border: 2px solid rgba(57, 255, 20, 0.2);
+        border-radius: var(--border-radius);
+        color: var(--color-text-primary);
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-height: 50px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .swal-move-button:active {
+        transform: scale(0.95);
+        background: var(--color-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-primary);
+    }
+    
+    .swal-move-button svg {
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+    }
+    
+    /* Prevenir zoom en inputs */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+    
+    /* Mejorar área táctil */
+    button, .btn, .reminder-btn, .delete-icon, [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Mejorar feedback visual en touch */
+    .tarea:active {
+        transform: scale(0.98);
+        opacity: 0.8;
+    }
+    
+    .btn-add:active {
+        transform: scale(0.95);
+    }
+    
+    .btn-secondary:active {
+        transform: scale(0.95);
+    }
 }
 
 
