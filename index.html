@@ -20,6 +20,10 @@
     <meta name="theme-color" content="#6a11cb" />
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sistema de Notificaciones -->
+    <script src="js/notifications.js"></script>
+    <!-- Sistema de Recordatorios (opcional) -->
+    <script src="js/reminders.js"></script>
   </head>
   <body>
     <!-- Contenedor de Autenticación con lógica dual -->
@@ -69,26 +73,6 @@
       <header class="app-header">
         <h1>Mi Lista de Tareas</h1>
         <div class="header-actions">
-          <button id="btn-pdf" class="btn-secondary" title="Descargar como PDF">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            <span>PDF</span>
-          </button>
           <button
             id="btn-logout"
             class="btn-secondary btn-danger"
@@ -158,8 +142,6 @@
     <!-- Mis Scripts -->
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/pdf.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
       if ("serviceWorker" in navigator) {

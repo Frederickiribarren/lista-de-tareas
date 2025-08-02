@@ -64,6 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const agregarTarea = () => {
         let textoTarea = nuevaTareaInput.value.trim();
         if (textoTarea === '' || !tareasCollection) {
+            // Mostrar mensaje de error si el campo está vacío
+            if (window.notificationManager) {
+                window.notificationManager.showWarningMessage('Por favor, escribe una tarea antes de agregarla');
+            }
             return;
         }
 
@@ -78,8 +82,21 @@ document.addEventListener('DOMContentLoaded', () => {
         tareasCollection.add(nuevaTarea)
             .then(() => {
                 nuevaTareaInput.value = '';
+                // Notificación de éxito
+                if (window.notificationManager) {
+                    window.notificationManager.showSuccessMessage('Tarea agregada exitosamente');
+                    // Notificación push si están habilitadas
+                    if (window.notificationManager.areNotificationsEnabled()) {
+                        window.notificationManager.notifyTaskAdded(sanitizedText);
+                    }
+                }
             })
-            .catch(error => console.error("Error al agregar tarea: ", error));
+            .catch(error => {
+                console.error("Error al agregar tarea: ", error);
+                if (window.notificationManager) {
+                    window.notificationManager.showErrorMessage('Error al agregar la tarea');
+                }
+            });
     };
 
     // Función para renderizar una tarea en el DOM
@@ -149,8 +166,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     container.querySelectorAll('.swal-move-button').forEach(button => {
                         button.addEventListener('click', () => {
                             const nuevaColumnaId = button.dataset.columna;
+                            const tareaElement = document.getElementById(id);
+                            const tareaTexto = tareaElement ? tareaElement.querySelector('p').textContent : '';
+                            
                             if (tareasCollection) {
-                                tareasCollection.doc(id).update({ columna: nuevaColumnaId });
+                                tareasCollection.doc(id).update({ columna: nuevaColumnaId })
+                                .then(() => {
+                                    // Notificar cuando se completa una tarea
+                                    if (nuevaColumnaId === 'terminadas' && window.notificationManager) {
+                                        window.notificationManager.showSuccessMessage('¡Tarea completada!');
+                                        if (window.notificationManager.areNotificationsEnabled()) {
+                                            window.notificationManager.notifyTaskCompleted(tareaTexto);
+                                        }
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error al mover tarea: ", error);
+                                    if (window.notificationManager) {
+                                        window.notificationManager.showErrorMessage('Error al mover la tarea');
+                                    }
+                                });
                             }
                             Swal.close();
                         });
@@ -163,6 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para eliminar una tarea
     const eliminarTarea = (id) => {
         if (!tareasCollection) return;
+        
+        // Obtener el texto de la tarea antes de eliminarla
+        const tareaElement = document.getElementById(id);
+        const tareaTexto = tareaElement ? tareaElement.querySelector('p').textContent : '';
         
         Swal.fire({
             title: '¿Estás seguro?',
@@ -182,6 +221,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         icon: 'success',
                         confirmButtonColor: 'var(--color-primary)'
                     });
+                    
+                    // Notificación de tarea eliminada
+                    if (window.notificationManager) {
+                        window.notificationManager.showSuccessMessage('Tarea eliminada correctamente');
+                        if (window.notificationManager.areNotificationsEnabled()) {
+                            window.notificationManager.notifyTaskDeleted(tareaTexto);
+                        }
+                    }
+                }).catch(error => {
+                    console.error("Error al eliminar tarea: ", error);
+                    if (window.notificationManager) {
+                        window.notificationManager.showErrorMessage('Error al eliminar la tarea');
+                    }
                 });
             }
         });
@@ -211,11 +263,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tareaArrastrada) {
                 const id = tareaArrastrada.id;
                 const nuevaColumnaId = columna.id;
+                const tareaTexto = tareaArrastrada.querySelector('p').textContent;
+                const columnaAnteriorId = tareaArrastrada.parentElement.id;
                 
                 // Actualizamos el documento en Firestore.
                 // El listener onSnapshot se encargará de mover el elemento en la UI.
                 if (tareasCollection) {
-                    tareasCollection.doc(id).update({ columna: nuevaColumnaId });
+                    tareasCollection.doc(id).update({ columna: nuevaColumnaId })
+                    .then(() => {
+                        // Notificar cuando se completa una tarea por drag & drop
+                        if (nuevaColumnaId === 'terminadas' && columnaAnteriorId !== 'terminadas' && window.notificationManager) {
+                            window.notificationManager.showSuccessMessage('¡Tarea completada!');
+                            if (window.notificationManager.areNotificationsEnabled()) {
+                                window.notificationManager.notifyTaskCompleted(tareaTexto);
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error al mover tarea: ", error);
+                        if (window.notificationManager) {
+                            window.notificationManager.showErrorMessage('Error al mover la tarea');
+                        }
+                    });
                 }
             }
         });
