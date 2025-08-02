@@ -18,7 +18,113 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Usa una acción pre-hecha para desplegar a GitHub Pages
+      # 2. Configurar Git para commits automáticos
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      # 3. Actualizar README.md automáticamente
+      - name: Update README.md
+        run: |
+          echo "# 📝 Lista de Tareas Moderna" > README.md
+          echo "" >> README.md
+          echo "## 🚀 Aplicación Web Progresiva (PWA) para gestión de tareas" >> README.md
+          echo "" >> README.md
+          echo "### 📅 Última actualización: $(date '+%d de %B de %Y a las %H:%M UTC')" >> README.md
+          echo "" >> README.md
+          echo "## ✨ Características principales:" >> README.md
+          echo "" >> README.md
+          echo "- 🔐 **Autenticación segura** con Firebase Auth" >> README.md
+          echo "- 📊 **Gestión por estados**: Pendientes → En Progreso → Terminadas" >> README.md
+          echo "- 🔔 **Sistema de notificaciones** inteligente" >> README.md
+          echo "- ⏰ **Recordatorios** solo para tareas en progreso" >> README.md
+          echo "- 📱 **Diseño responsive** (móvil y escritorio)" >> README.md
+          echo "- 🎨 **Interfaz moderna** con animaciones fluidas" >> README.md
+          echo "- 💾 **Almacenamiento en tiempo real** con Firestore" >> README.md
+          echo "- 🔄 **Sincronización automática** entre dispositivos" >> README.md
+          echo "- 📴 **Funcionamiento offline** con Service Worker" >> README.md
+          echo "" >> README.md
+          echo "## 🛠️ Tecnologías utilizadas:" >> README.md
+          echo "" >> README.md
+          echo "- **Frontend**: HTML5, CSS3, JavaScript ES6+" >> README.md
+          echo "- **Backend**: Firebase (Auth + Firestore)" >> README.md
+          echo "- **PWA**: Service Worker, Web App Manifest" >> README.md
+          echo "- **UI/UX**: SweetAlert2, Animaciones CSS" >> README.md
+          echo "- **Deployment**: GitHub Pages + GitHub Actions" >> README.md
+          echo "" >> README.md
+          echo "## 🎯 Funcionalidades especiales:" >> README.md
+          echo "" >> README.md
+          echo "### 🔔 Sistema de Notificaciones Inteligente" >> README.md
+          echo "- Notificaciones del navegador para tareas importantes" >> README.md
+          echo "- Toast messages para feedback inmediato" >> README.md
+          echo "- Recordatorios configurables solo para tareas en progreso" >> README.md
+          echo "" >> README.md
+          echo "### 📱 Experiencia Móvil Optimizada" >> README.md
+          echo "- Interfaz táctil intuitiva" >> README.md
+          echo "- Gestos para cambiar estados de tareas" >> README.md
+          echo "- Diseño responsivo que se adapta a cualquier pantalla" >> README.md
+          echo "" >> README.md
+          echo "### 🔄 Sincronización en Tiempo Real" >> README.md
+          echo "- Cambios instantáneos entre dispositivos" >> README.md
+          echo "- Base de datos Firestore para persistencia" >> README.md
+          echo "- Estado sincronizado automáticamente" >> README.md
+          echo "" >> README.md
+          echo "## 🌐 Demo en vivo:" >> README.md
+          echo "" >> README.md
+          echo "👉 **[Ver aplicación](https://frederickiribarren.github.io/lista-de-tareas/)**" >> README.md
+          echo "" >> README.md
+          echo "## 📊 Estadísticas del proyecto:" >> README.md
+          echo "" >> README.md
+          echo "- 📁 **Archivos principales**: $(find . -name '*.js' -o -name '*.html' -o -name '*.css' | wc -l)" >> README.md
+          echo "- 📝 **Líneas de código**: $(find . -name '*.js' -o -name '*.html' -o -name '*.css' | xargs wc -l | tail -1 | awk '{print $1}')" >> README.md
+          echo "- 🔧 **Commits**: $(git rev-list --count HEAD)" >> README.md
+          echo "- 📅 **Último commit**: $(git log -1 --format='%h - %s (%cr)')" >> README.md
+          echo "" >> README.md
+          echo "## 🚀 Cómo usar:" >> README.md
+          echo "" >> README.md
+          echo "1. **Crear cuenta**: Regístrate con tu email" >> README.md
+          echo "2. **Agregar tareas**: Usa el campo de texto y el botón +" >> README.md
+          echo "3. **Gestionar estados**: Arrastra o toca para mover tareas" >> README.md
+          echo "4. **Configurar recordatorios**: Solo en tareas 'En Progreso'" >> README.md
+          echo "5. **Recibir notificaciones**: Permite permisos del navegador" >> README.md
+          echo "" >> README.md
+          echo "## 🔧 Desarrollo local:" >> README.md
+          echo "" >> README.md
+          echo "\`\`\`bash" >> README.md
+          echo "# Clonar repositorio" >> README.md
+          echo "git clone https://github.com/Frederickiribarren/lista-de-tareas.git" >> README.md
+          echo "" >> README.md
+          echo "# Entrar al directorio" >> README.md
+          echo "cd lista-de-tareas" >> README.md
+          echo "" >> README.md
+          echo "# Servir localmente" >> README.md
+          echo "python -m http.server 8000" >> README.md
+          echo "# O usar cualquier servidor local" >> README.md
+          echo "\`\`\`" >> README.md
+          echo "" >> README.md
+          echo "## 📄 Licencia:" >> README.md
+          echo "" >> README.md
+          echo "Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles." >> README.md
+          echo "" >> README.md
+          echo "---" >> README.md
+          echo "" >> README.md
+          echo "💻 **Desarrollado con ❤️ por [Frederick Iribarren](https://github.com/Frederickiribarren)**" >> README.md
+          echo "" >> README.md
+          echo "⭐ **¡Dale una estrella si te gusta el proyecto!** ⭐" >> README.md
+
+      # 4. Commit y push del README actualizado (solo si hay cambios)
+      - name: Commit updated README
+        run: |
+          git add README.md
+          if git diff --staged --quiet; then
+            echo "No changes to README.md"
+          else
+            git commit -m "📚 Auto-update README.md with latest project info"
+            git push
+          fi
+
+      # 5. Usa una acción pre-hecha para desplegar a GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

@@ -184,7 +184,7 @@ class TaskReminder {
 
 // Función para agregar botón de recordatorio a las tareas existentes
 function addReminderButtons() {
-    // Solo agregar botones a las tareas en la columna "En Progreso"
+    // Solo agregar botones a tareas que están "En Progreso"
     const tareasEnProgreso = document.querySelectorAll('#en-progreso .tarea');
     
     tareasEnProgreso.forEach(tarea => {
@@ -203,16 +203,15 @@ function addReminderButtons() {
         
         tarea.appendChild(reminderBtn);
     });
-
-    // Remover botones de recordatorio de las tareas que NO están en "En Progreso"
-    const todasLasTareas = document.querySelectorAll('.tarea');
-    todasLasTareas.forEach(tarea => {
-        const columnaId = tarea.parentElement.id;
-        if (columnaId !== 'en-progreso') {
-            const reminderBtn = tarea.querySelector('.reminder-btn');
-            if (reminderBtn) {
-                reminderBtn.remove();
-            }
+    
+    // Remover botones de recordatorio de tareas que NO están en progreso
+    const tareasPendientes = document.querySelectorAll('#pendientes .tarea');
+    const tareasTerminadas = document.querySelectorAll('#terminadas .tarea');
+    
+    [...tareasPendientes, ...tareasTerminadas].forEach(tarea => {
+        const reminderBtn = tarea.querySelector('.reminder-btn');
+        if (reminderBtn) {
+            reminderBtn.remove();
         }
     });
 }

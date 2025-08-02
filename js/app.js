@@ -138,6 +138,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         columna.appendChild(elementoTarea);
         
+        // Actualizar botones de recordatorio después de renderizar
+        if (typeof addReminderButtons === 'function') {
+            // Pequeño delay para asegurar que el DOM esté actualizado
+            setTimeout(() => {
+                addReminderButtons();
+            }, 10);
+        }
+        
         // Lógica condicional para interacción
         if (isMobile) {
             elementoTarea.setAttribute('draggable', 'false');
