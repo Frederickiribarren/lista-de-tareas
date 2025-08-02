@@ -1,12 +1,12 @@
 :root {
-    --color-primary: #6a11cb;
-    --color-secondary: #2575fc;
-    --color-background: #f4f7f6;
-    --color-surface: #ffffff;
-    --color-text-primary: #333333;
+    --color-primary: #a7e614;
+    --color-secondary: #77a708;
+    --color-background: #000000;
+    --color-surface: #35382f;
+    --color-text-primary: #ffffff;
     --color-text-secondary: #757575;
-    --color-danger: #e74c3c;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --color-danger: #a7e614;
+    --shadow: 0 4px 15px #81f003;
     --border-radius: 12px;
 }
 
@@ -142,12 +142,21 @@ body {
     gap: 25px;
 }
 
+.columna {
+    background-color: black;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 .columna h2 {
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 15px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid #16fc02;
     color: var(--color-text-primary);
 }
 
@@ -916,7 +925,7 @@ input[type="checkbox"]:disabled::before {
 
 /* Botón para configurar recordatorios (opcional) */
 .reminder-btn {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #358585 0%, #16ad3c 100%);
     border: none;
     color: white;
     padding: 8px 12px;
@@ -930,7 +939,7 @@ input[type="checkbox"]:disabled::before {
 
 .reminder-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+    box-shadow: 0 4px 12px rgba(9, 255, 0, 0.4);
 }
 
 .reminder-btn:active {
