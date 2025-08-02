@@ -1,9 +1,9 @@
 :root {
     --color-primary: #a7e614;
     --color-secondary: #77a708;
-    --color-background: #000000;
-    --color-surface: #35382f;
-    --color-text-primary: #ffffff;
+    --color-background: #fdfdfd;
+    --color-surface: #ffffff;
+    --color-text-primary: #000000;
     --color-text-secondary: #757575;
     --color-danger: #a7e614;
     --shadow: 0 4px 15px #81f003;
@@ -143,7 +143,7 @@ body {
 }
 
 .columna {
-    background-color: black;
+    background-color: rgb(241, 239, 239);
     border-radius: var(--border-radius);
     padding: 20px;
     box-shadow: var(--shadow);
