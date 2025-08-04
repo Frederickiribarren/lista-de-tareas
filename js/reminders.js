@@ -22,11 +22,18 @@ class TaskReminder {
     }
 
     // Cargar recordatorios desde localStorage
-    loadReminders() {
+        loadReminders() {
         const saved = localStorage.getItem('taskReminders');
         if (saved) {
             const remindersArray = JSON.parse(saved);
-            this.reminders = new Map(remindersArray);
+            // **SOLUCIÓN: Convertir las fechas de string a objeto Date al cargar**
+            const remindersWithDates = remindersArray.map(([taskId, reminder]) => {
+                // Asegurarse de que las fechas sean objetos Date
+                reminder.reminderDate = new Date(reminder.reminderDate);
+                reminder.created = new Date(reminder.created);
+                return [taskId, reminder];
+            });
+            this.reminders = new Map(remindersWithDates);
         }
     }
 
@@ -62,7 +69,9 @@ class TaskReminder {
         const now = new Date();
         
         this.reminders.forEach((reminder, taskId) => {
-            if (!reminder.triggered && now >= reminder.reminderDate) {
+            // **MEJORA: Asegurarse de que reminder.reminderDate es un objeto Date válido**
+            const reminderDate = new Date(reminder.reminderDate);
+            if (!reminder.triggered && now >= reminderDate) {
                 this.triggerReminder(reminder);
                 
                 // Marcar como disparado o reprogramar según el tipo
@@ -200,11 +209,23 @@ function addReminderButtons() {
 // Mostrar diálogo para configurar recordatorio
 function showReminderDialog(taskId, taskText) {
     if (typeof Swal === 'undefined') return;
-    
+
+    const existingReminder = window.taskReminder.reminders.get(taskId);
     const now = new Date();
-    const defaultDate = new Date(now.getTime() + 60 * 60000); // 1 hora después
-    const defaultDateString = defaultDate.toISOString().slice(0, 16);
-    
+    const minDate = new Date(now.getTime() + 60000);
+
+    // **LA SOLUCIÓN: Formatear la fecha para la zona horaria local**
+    const toLocalISOString = (date) => {
+        const tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        const localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, 16);
+        return localISOTime;
+    };
+
+    const minDateString = toLocalISOString(minDate);
+    const defaultDate = existingReminder ? new Date(existingReminder.reminderDate) : minDate;
+    const defaultDateString = toLocalISOString(defaultDate);
+    const defaultType = existingReminder ? existingReminder.reminderType : 'once';
+
     Swal.fire({
         title: 'Configurar Recordatorio',
         html: `
@@ -216,7 +237,7 @@ function showReminderDialog(taskId, taskText) {
                     type="datetime-local" 
                     id="reminder-date" 
                     value="${defaultDateString}"
-                    min="${now.toISOString().slice(0, 16)}"
+                    min="${minDateString}"
                     style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px;"
                 />
                 
@@ -227,9 +248,9 @@ function showReminderDialog(taskId, taskText) {
                     id="reminder-type" 
                     style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px;"
                 >
-                    <option value="once">Una vez</option>
-                    <option value="daily">Diario</option>
-                    <option value="weekly">Semanal</option>
+                    <option value="once" ${defaultType === 'once' ? 'selected' : ''}>Una vez</option>
+                    <option value="daily" ${defaultType === 'daily' ? 'selected' : ''}>Diario</option>
+                    <option value="weekly" ${defaultType === 'weekly' ? 'selected' : ''}>Semanal</option>
                 </select>
                 
                 <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px; font-size: 13px; color: #666;">
@@ -252,8 +273,9 @@ function showReminderDialog(taskId, taskText) {
             }
             
             const reminderDate = new Date(date);
-            if (reminderDate <= new Date()) {
-                Swal.showValidationMessage('La fecha debe ser en el futuro');
+            // 4. VALIDACIÓN MEJORADA
+            if (reminderDate < new Date(new Date().getTime() + 59000)) { // Aprox. 1 min
+                Swal.showValidationMessage('La fecha debe ser al menos un minuto en el futuro');
                 return false;
             }
             
