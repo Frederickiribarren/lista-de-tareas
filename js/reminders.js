@@ -93,13 +93,20 @@ class TaskReminder {
     // Disparar recordatorio
     triggerReminder(reminder) {
         // **MEJORA: Usar el Service Worker para mostrar notificaciones**
-        // Esto permite que las notificaciones funcionen incluso si la app está cerrada.
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        // Esto permite que las notificaciones funcionen incluso si la app está cerrada,
+        // aunque la fiabilidad del temporizador (setInterval) puede variar en segundo plano.
+        if ('serviceWorker' in navigator && 'showNotification' in ServiceWorkerRegistration.prototype) {
             navigator.serviceWorker.ready.then(registration => {
                 registration.showNotification('⏰ Recordatorio de tarea', {
-                    body: `No olvides: "${reminder.taskText}"`,
-                    icon: 'images/icon-192.png',
-                    badge: 'images/icon-192.png',
+                    body: `¡No olvides tu tarea: "${reminder.taskText}"!`,
+                    icon: './images/icon-192.png',
+                    badge: './images/icon-192.png',
+                    vibrate: [200, 100, 200, 100, 200],
+                    requireInteraction: true,
+                    actions: [
+                        { action: 'explore', title: 'Ver Tareas' },
+                        { action: 'close', title: 'Cerrar' }
+                    ],
                     tag: `reminder-${reminder.taskId}`
                 });
             });
