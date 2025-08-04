@@ -209,17 +209,3 @@ auth.onAuthStateChanged(user => {
     appContainer.style.display = 'none';
   }
 });
-// Decide qué pantalla mostrar (login o la app de tareas)
-auth.onAuthStateChanged(user => {
-  if (user) {
-    // Usuario ha iniciado sesión
-    authWrapper.style.display = 'none';
-    appContainer.style.display = 'block';
-    // Avisa a app.js que el usuario está listo para cargar sus tareas
-    window.dispatchEvent(new CustomEvent('user-logged-in', { detail: { userId: user.uid } }));
-  } else {
-    // Usuario ha cerrado sesión
-    authWrapper.style.display = 'flex';
-    appContainer.style.display = 'none';
-  }
-});

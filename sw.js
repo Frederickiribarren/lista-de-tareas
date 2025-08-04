@@ -120,12 +120,18 @@ self.addEventListener('notificationclick', event => {
   } else {
     // Clic en la notificación principal
     event.waitUntil(
-      clients.matchAll().then(clientList => {
+      clients.matchAll({
+        type: 'window',
+        includeUncontrolled: true
+      }).then(clientList => {
+        // Si hay una ventana de la app abierta, la enfoca
         if (clientList.length > 0) {
-          // Si la app ya está abierta, enfocarla
-          return clientList[0].focus();
+          let client = clientList.find(c => c.url === self.registration.scope && 'focus' in c);
+          if (client) {
+            return client.focus();
+          }
         }
-        // Si no está abierta, abrirla
+        // Si no, abre una nueva ventana
         return clients.openWindow('./');
       })
     );
