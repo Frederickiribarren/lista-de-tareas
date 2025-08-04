@@ -81,7 +81,8 @@ self.addEventListener('push', event => {
     body: event.data ? event.data.text() : 'Nueva notificación de Lista de Tareas',
     icon: './images/icon-192.png',
     badge: './images/icon-192.png',
-    vibrate: [100, 50, 100],
+    vibrate: [200, 100, 200, 100, 200], // Patrón de vibración más notorio
+    requireInteraction: true, // La notificación no se cierra sola
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 1
